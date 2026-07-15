@@ -376,6 +376,16 @@
     </div>
     <span class="hint">← The checklist changes across your 5 clinical states (only affects the Today tab)</span>
   </div>
+  <div class="controls">
+    <div class="seg" id="timeSeg">
+      <button class="on" data-tk="auto">Auto</button>
+      <button data-tk="morning">Morning</button>
+      <button data-tk="afternoon">Afternoon</button>
+      <button data-tk="evening">Evening</button>
+      <button data-tk="night">Night</button>
+    </div>
+    <span class="hint">Time of day — Auto follows the real clock; switch to preview how Today reads at a given time</span>
+  </div>
 
   <div class="stage">
     <div class="phone">
@@ -497,10 +507,26 @@ const SKY_MOON='<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><d
 const SKY_KF=[[0,[110,110,175]],[5,[255,150,120]],[7.5,[255,214,90]],[12,[255,238,168]],[16,[255,206,110]],[18.5,[255,150,105]],[20,[150,120,200]],[23,[110,110,175]],[24,[110,110,175]]];
 function skyColor(h){for(var i=0;i<SKY_KF.length-1;i++){var a=SKY_KF[i],b=SKY_KF[i+1];if(h>=a[0]&&h<=b[0]){var t=(h-a[0])/(b[0]-a[0]),c=a[1],d=b[1];return 'rgb('+Math.round(c[0]+(d[0]-c[0])*t)+','+Math.round(c[1]+(d[1]-c[1])*t)+','+Math.round(c[2]+(d[2]-c[2])*t)+')';}}return 'rgb(255,214,90)';}
 function skyDaylight(h){if(h>=7&&h<=17)return 1;if(h>5&&h<7)return (h-5)/2;if(h>17&&h<19)return 1-(h-17)/2;return 0;}
+/* time of day — 'auto' follows the real clock; presets preview a time. Content personalizes with it. */
+let timeKey='auto';
+function curH(){
+  if(timeKey==='morning')return 9;
+  if(timeKey==='afternoon')return 14;
+  if(timeKey==='evening')return 19;
+  if(timeKey==='night')return 22;
+  var d=new Date();return d.getHours()+d.getMinutes()/60;
+}
+function greetWord(){var h=curH();return (h>=5&&h<12)?'Good morning':(h<17)?'Good afternoon':'Good evening';}
+function timeCopy(kind){
+  var h=curH(),cp=(h>=5&&h<12)?'morning':(h>=12&&h<17)?'afternoon':(h>=17&&h<21)?'evening':'night';
+  var P={morning:'Start with a protein-rich breakfast',afternoon:'Add protein to your lunch',evening:'Round out your protein at dinner',night:'You got your protein in today'};
+  var W={morning:'Start your day with a glass of water',afternoon:'Keep sipping through the afternoon',evening:'A couple more cups before you wind down',night:'You are set on water for today'};
+  return (kind==='protein'?P:W)[cp];
+}
 function applySky(){
   var glow=document.querySelector('.jh-glow'); if(!glow) return;
   var sun=document.querySelector('.jh-sun'),moon=document.querySelector('.jh-moon'),orb=document.querySelector('.jh-orb'),stars=document.querySelector('.jh-stars');
-  var d=new Date(), h=d.getHours()+d.getMinutes()/60, dl=skyDaylight(h);
+  var h=curH(), dl=skyDaylight(h);
   glow.style.background='radial-gradient(circle at 50% 50%,'+skyColor(h)+' 0%, rgba(255,255,255,0) 68%)';
   sun.innerHTML=SKY_SUN; moon.innerHTML=SKY_MOON; sun.style.opacity=0;
   if(dl>=0.25){            // daytime: warm glow bleeding off the top-left (matches the design)
@@ -515,7 +541,7 @@ function applySky(){
 function juneHero(line, prompts, med){
   return `<div class="hero2" onclick="openAI('Today','${line}')">
     <div class="jh-sky"><div class="jh-glow"></div><div class="jh-stars"></div><div class="jh-orb"><div class="jh-sun"></div><div class="jh-moon"></div></div></div>
-    <div class="jh-hi">Hi Carol!</div>
+    <div class="jh-hi">${greetWord()}, Carol</div>
     <div class="jh-line">${line}</div>
     ${med?medCard:''}
   </div>`;
@@ -535,7 +561,7 @@ function cards(items){return '<div class="ci-list">'+items.map(planItem).join(''
 /* ---------- TODAY variants ---------- */
 /* Honor-system care-plan reminder — pulls from the care plan, optional self-report */
 function planItem(it){
-  var top, cardCls='ci-card', cardAttr='';
+  var top, cardCls='ci-card', cardAttr='', srcTxt=it.timevar?timeCopy(it.timevar):it.src;
   if(it.type==='device') top='<span class="synced">⌚ '+it.n+'</span>';
   else if(it.type==='tally'){
     cardCls='ci-card ci-tap';
@@ -553,7 +579,7 @@ function planItem(it){
   return '<div class="'+cardCls+'"'+cardAttr+'>'+
     '<div class="ci-body">'+
       '<div class="ci-head">'+(it.img?'<span class="ci-icon ci-photo" style="background-image:url(\''+it.img+'\')"></span>':'<span class="ci-icon">'+it.i+'</span>')+'<p class="ci-title">'+it.t+'</p>'+top+'</div>'+
-      (it.src?'<p class="ci-desc">'+it.src+'</p>':'')+
+      (srcTxt?'<p class="ci-desc">'+srcTxt+'</p>':'')+
     '</div>'+
     (pills?'<div class="ci-pills">'+pills+'</div>':'')+'</div>';
 }
@@ -680,8 +706,8 @@ const todayS3 = ()=>`
   ${checklist('From Dr. Desai’s care plan',[
     {i:'🩸',t:'Complete your lab work',src:'Dr. Desai ordered baseline labs · results go straight to them',kind:'task',cta:'Start',ai:'Where’s my nearest Quest, and how do I prepare for the draw?'},
     {i:'🧘',t:'Lower-body strength',src:'With Nadia · 3× this week',img:trainerPhoto,dur:'22 min',ai:'Here’s your 22-minute lower-body strength class with Nadia. Want me to start it?',pills:[{c:'Why strength training?',a:'Strength protects your muscle as you lose weight — that’s what keeps you independent. Here’s why it matters most for you.'},{c:'Open your Bold movement plan',a:'This is part of your Bold weight-management program. Here’s your full movement plan and this week’s recommended classes.'}]},
-    {i:'🍗',t:'Eat 100g of protein',src:'Protects your muscle',type:'tally',n:0,target:100,step:10,unit:'g',ai:'What does 100g of protein look like in a day?',aiLabel:'Easy protein ideas',topic:'protein'},
-    {i:'💧',t:'Drink 6 cups of water',src:'Protects your kidneys',type:'tally',n:0,target:6,ai:'I struggle to drink enough — any tips?',aiLabel:'Tips to drink more',topic:'water'},
+    {i:'🍗',t:'Eat 100g of protein',src:'Protects your muscle',type:'tally',n:0,target:100,step:10,unit:'g',ai:'What does 100g of protein look like in a day?',aiLabel:'Easy protein ideas',topic:'protein',timevar:'protein'},
+    {i:'💧',t:'Drink 6 cups of water',src:'Protects your kidneys',type:'tally',n:0,target:6,ai:'I struggle to drink enough — any tips?',aiLabel:'Tips to drink more',topic:'water',timevar:'water'},
   ])}
   ${programCard(0,16)}
   ${fromTeam}`;
@@ -692,8 +718,8 @@ const todayS4 = ()=>`
   ${checklist('',[
     {i:'💊',t:'Take your medication',src:'Your weekly dose · check in for side effects after',kind:'med'},
     {i:'🧘',t:'Lower-body strength',src:'With Nadia · 3× this week',img:trainerPhoto,dur:'22 min',ai:'Here’s your 22-minute lower-body strength class with Nadia. Want me to start it?',pills:[{c:'Why strength training?',a:'Strength protects your muscle as you lose weight — that’s what keeps you independent. Here’s why it matters most for you.'},{c:'Open your Bold movement plan',a:'This is part of your Bold weight-management program. Here’s your full movement plan and this week’s recommended classes.'}]},
-    {i:'🍗',t:'Eat 100g of protein',src:'Protects your muscle',type:'tally',n:30,target:100,step:10,unit:'g',ai:'What does 100g of protein look like in a day?',aiLabel:'Easy protein ideas',topic:'protein'},
-    {i:'💧',t:'Drink 6 cups of water',src:'Protects your kidneys',type:'tally',n:2,target:6,ai:'I struggle to drink enough — any tips?',aiLabel:'Tips to drink more',topic:'water'},
+    {i:'🍗',t:'Eat 100g of protein',src:'Protects your muscle',type:'tally',n:30,target:100,step:10,unit:'g',ai:'What does 100g of protein look like in a day?',aiLabel:'Easy protein ideas',topic:'protein',timevar:'protein'},
+    {i:'💧',t:'Drink 6 cups of water',src:'Protects your kidneys',type:'tally',n:2,target:6,ai:'I struggle to drink enough — any tips?',aiLabel:'Tips to drink more',topic:'water',timevar:'water'},
   ])}
   ${programCard(4,16)}
   <div class="banner amber"><span>⏱</span><div><b>Refill review in 6 days</b>Medications aren’t auto-renewed. Tap to see what to have ready and book your telehealth visit.</div></div>
@@ -713,8 +739,8 @@ const todayS5 = ()=>`
   </div>
   ${checklist('From your care plan',[
     {i:'🧘',t:'Lower-body strength',src:'With Nadia · 3× this week',img:trainerPhoto,dur:'22 min',ai:'Here’s your 22-minute lower-body strength class with Nadia. Want me to start it?',pills:[{c:'Why strength training?',a:'Strength protects your muscle as you lose weight — that’s what keeps you independent. Here’s why it matters most for you.'},{c:'Open your Bold movement plan',a:'This is part of your Bold weight-management program. Here’s your full movement plan and this week’s recommended classes.'}]},
-    {i:'🍗',t:'Eat 100g of protein',src:'Protects your muscle',type:'tally',n:40,target:100,step:10,unit:'g',ai:'What does 100g of protein look like in a day?',aiLabel:'Easy protein ideas',topic:'protein'},
-    {i:'💧',t:'Drink 6 cups of water',src:'Protects your kidneys',type:'tally',n:3,target:6,ai:'I struggle to drink enough — any tips?',aiLabel:'Tips to drink more',topic:'water'},
+    {i:'🍗',t:'Eat 100g of protein',src:'Protects your muscle',type:'tally',n:40,target:100,step:10,unit:'g',ai:'What does 100g of protein look like in a day?',aiLabel:'Easy protein ideas',topic:'protein',timevar:'protein'},
+    {i:'💧',t:'Drink 6 cups of water',src:'Protects your kidneys',type:'tally',n:3,target:6,ai:'I struggle to drink enough — any tips?',aiLabel:'Tips to drink more',topic:'water',timevar:'water'},
   ])}
   <p class="honor"><b>Where this grows:</b> log water and protein with a tap, and start trainer-led classes right from your plan — same gentle reminders, less typing.</p>
   ${programCard(10,16)}
@@ -962,11 +988,13 @@ function render(){
   }
   document.querySelectorAll('#tabbar .tab').forEach(b=>b.classList.toggle('on',b.dataset.t===tab));
   document.querySelectorAll('#variantSeg button').forEach(b=>b.classList.toggle('on',b.dataset.v===variant));
+  document.querySelectorAll('#timeSeg button').forEach(b=>b.classList.toggle('on',b.dataset.tk===timeKey));
 }
 function go(t){tab=t;render();}
 function setMsg(m){msgTab=m;render();}
 document.querySelectorAll('#tabbar .tab').forEach(b=>b.onclick=()=>go(b.dataset.t));
 document.querySelectorAll('#variantSeg button').forEach(b=>b.onclick=()=>{variant=b.dataset.v;tab='today';render();});
+document.querySelectorAll('#timeSeg button').forEach(b=>b.onclick=()=>{timeKey=b.dataset.tk;render();});
 
 render();
 </script>
