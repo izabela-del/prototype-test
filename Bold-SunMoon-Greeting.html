@@ -44,7 +44,12 @@
   .medcard .d{color:var(--ink-2);font-size:12.5px;margin:2px 0 0}
   .mbtns{display:flex;gap:9px;margin-top:11px}
   .mbtn{border:1.5px solid var(--line);background:#fff;border-radius:20px;padding:8px 13px;font-size:12.5px;font-weight:700;color:var(--ink-2);font-family:var(--sans)}
-  .rest{padding:14px 16px}.rest .row{height:44px;background:#fff;border:1px solid var(--line);border-radius:12px;margin-bottom:10px}
+  /* time-aware content cards */
+  .content{padding:14px 16px 18px}
+  .tcard{display:flex;gap:12px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:14px;padding:13px;margin-bottom:10px;box-shadow:var(--shadow)}
+  .tcard .ic{width:38px;height:38px;flex:0 0 38px;border-radius:50%;background:rgba(67,97,238,.32);display:flex;align-items:center;justify-content:center;font-size:17px}
+  .tcard .tt{font-weight:700;font-size:14.5px;margin:0}
+  .tcard .ts{color:var(--ink-2);font-size:12.5px;margin:2px 0 0;transition:opacity .3s ease}
 
   /* ---- controls ---- */
   .panel{flex:1;min-width:280px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:var(--shadow)}
@@ -61,7 +66,7 @@
 <body>
 <div class="wrap">
   <h1>Bold — Sun / Moon greeting</h1>
-  <p class="lede">The greeting's glow and little celestial body follow the time of day — sunrise warms up, midday brightens, sunset glows amber, and night turns to a calm moon. Drag the slider or tap a preset to scrub through a day.</p>
+  <p class="lede">The greeting's glow and little celestial body follow the time of day — sunrise warms up, midday brightens, sunset glows amber, and night turns to a calm moon. The card copy shifts too: protein and water guidance changes with the time of day. Drag the slider or tap a preset to scrub through a day.</p>
 
   <div class="stage">
     <div class="phone">
@@ -83,7 +88,10 @@
             <div class="mbtns"><span class="mbtn">🙂 I’m doing well</span><span class="mbtn">＋ Log side effects</span></div>
           </div>
         </div>
-        <div class="rest"><div class="row"></div><div class="row"></div></div>
+        <div class="content">
+          <div class="tcard"><div class="ic">🍗</div><div><p class="tt">Eat 100g of protein</p><p class="ts" id="proteinSub">Start with a protein-rich breakfast</p></div></div>
+          <div class="tcard"><div class="ic">💧</div><div><p class="tt">Drink 6 cups of water</p><p class="ts" id="waterSub">Start your day with a glass of water</p></div></div>
+        </div>
       </div>
     </div>
 
@@ -189,6 +197,12 @@
     document.getElementById('gsub').textContent = dl>0
       ? 'To-dos below are based on your action plan to keep you safe.'
       : 'Winding down — I’m here if anything’s on your mind before bed.';
+    // time-aware content
+    const cp = (h>=5&&h<12)?'morning':(h>=12&&h<17)?'afternoon':(h>=17&&h<21)?'evening':'night';
+    const P={morning:'Start with a protein-rich breakfast',afternoon:'Add protein to your lunch',evening:'Round out your protein at dinner',night:'You got your protein in today'};
+    const W={morning:'Start your day with a glass of water',afternoon:'Keep sipping through the afternoon',evening:'A couple more cups before you wind down',night:'You are set on water for today'};
+    document.getElementById('proteinSub').textContent=P[cp];
+    document.getElementById('waterSub').textContent=W[cp];
   }
 
   const slider=document.getElementById('time');
