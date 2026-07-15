@@ -517,10 +517,10 @@ function curH(){
   var d=new Date();return d.getHours()+d.getMinutes()/60;
 }
 function greetWord(){var h=curH();return (h>=5&&h<12)?'Good morning':(h<17)?'Good afternoon':'Good evening';}
-function timeCopy(kind){
+function timeLabel(kind){
   var h=curH(),cp=(h>=5&&h<12)?'morning':(h>=12&&h<17)?'afternoon':(h>=17&&h<21)?'evening':'night';
-  var P={morning:'Start with a protein-rich breakfast',afternoon:'Add protein to your lunch',evening:'Round out your protein at dinner',night:'You got your protein in today'};
-  var W={morning:'Start your day with a glass of water',afternoon:'Keep sipping through the afternoon',evening:'A couple more cups before you wind down',night:'You are set on water for today'};
+  var P={morning:'Protein-rich breakfast',afternoon:'Protein at lunch',evening:'Protein at dinner',night:'Protein today'};
+  var W={morning:'Water with breakfast',afternoon:'Keep sipping',evening:'Water this evening',night:'Water today'};
   return (kind==='protein'?P:W)[cp];
 }
 function applySky(){
@@ -561,7 +561,7 @@ function cards(items){return '<div class="ci-list">'+items.map(planItem).join(''
 /* ---------- TODAY variants ---------- */
 /* Honor-system care-plan reminder — pulls from the care plan, optional self-report */
 function planItem(it){
-  var top, cardCls='ci-card', cardAttr='', srcTxt=it.timevar?timeCopy(it.timevar):it.src;
+  var top, cardCls='ci-card', cardAttr='', srcTxt=it.src;
   if(it.type==='device') top='<span class="synced">⌚ '+it.n+'</span>';
   else if(it.type==='tally'){
     cardCls='ci-card ci-tap';
@@ -575,7 +575,7 @@ function planItem(it){
   else top='<button class="ci-done'+(it.done?' on':'')+'" onclick="markDone(this)"><span class="ci-circle">✓</span><span class="ci-label">Done</span></button>';
   var pills='';
   if(it.pills) pills=it.pills.map(function(p){return '<button class="ci-pill" onclick="event.stopPropagation();openAI(\''+p.c+'\',\''+p.a+'\')">'+p.c+'</button>';}).join('');
-  else if(it.kind!=='task' && it.aiLabel && (it.topic||it.ai)) pills='<button class="ci-pill" onclick="event.stopPropagation();'+(it.topic?('openTopic(\''+it.topic+'\')'):('openAI(\''+it.t+'\',\''+it.ai+'\')'))+'">'+it.aiLabel+'</button>';
+  else if(it.kind!=='task' && it.aiLabel && (it.topic||it.ai)) pills='<button class="ci-pill" onclick="event.stopPropagation();'+(it.topic?('openTopic(\''+it.topic+'\')'):('openAI(\''+it.t+'\',\''+it.ai+'\')'))+'">'+(it.timevar?timeLabel(it.timevar):it.aiLabel)+'</button>';
   return '<div class="'+cardCls+'"'+cardAttr+'>'+
     '<div class="ci-body">'+
       '<div class="ci-head">'+(it.img?'<span class="ci-icon ci-photo" style="background-image:url(\''+it.img+'\')"></span>':'<span class="ci-icon">'+it.i+'</span>')+'<p class="ci-title">'+it.t+'</p>'+top+'</div>'+
