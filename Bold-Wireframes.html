@@ -669,10 +669,10 @@ const todayS1 = ()=>`
   <div class="sec-h">Complete these to see your doctor <small>0 of 4 done</small></div>
   <p class="chkintro">Your visit with Dr. Desai is on hold until all four are done.</p>
   ${cards([
-    {i:'🔒',t:'HIPAA Notice of Privacy Practices',src:'How your health information is used and protected',kind:'task',cta:'Review',doc:'hipaa'},
-    {i:'📋',t:'New Patient Agreement',src:'How telehealth care and billing work',kind:'task',cta:'Review',doc:'npa'},
-    {i:'💻',t:'Telemedicine consent',src:'Care by video, and when to call 911',kind:'task',cta:'Review',doc:'telemedicine'},
-    {i:'📝',t:'Weight management intake form',src:'Health history and habits, plus the PHQ-2 and STEADI screenings',kind:'task',cta:'Start',doc:'intake'},
+    {i:'🔒',t:'HIPAA Notice of Privacy Practices',src:'How your information is protected',kind:'task',cta:'Review',doc:'hipaa'},
+    {i:'📋',t:'New Patient Agreement',src:'How your care and billing work',kind:'task',cta:'Review',doc:'npa'},
+    {i:'💻',t:'Telemedicine consent',src:'Care by video',kind:'task',cta:'Review',doc:'telemedicine'},
+    {i:'📝',t:'Weight management intake form',src:'A few questions about your health',kind:'task',cta:'Start',doc:'intake'},
   ])}
   <p class="chkintro">Have questions? <span class="clink" onclick="openAI('Care Coordinator','Happy to set up a quick call with your Care Coordinator to walk you through any of these forms. Want me to find a time?')">Schedule a call with a Care Coordinator ›</span></p>
   ${fromTeam}`;
@@ -684,9 +684,9 @@ const todayS2 = ()=>`
   <div class="sec-h">To do <small>1/4 done</small></div>
   <p class="chkintro">Optional steps to personalize your care.</p>
   ${cards([
-    {i:'📏',t:'Share your measurements',src:'Waist and height help your doctor plan your care',kind:'step',time:'5 min',ai:'How do I measure my waist and height correctly?'},
-    {i:'〰️',t:'Your first movement check',src:'A simple sit-to-stand to see where you are starting from',kind:'step',time:'1 min',ai:'How do I do the sit-to-stand movement check safely?'},
-    {i:'🧘',t:'Get your fitness plan',src:'A few quick questions to get a plan tailored to you',kind:'step',time:'5 min',ai:'What questions will you ask to build my fitness plan?'},
+    {i:'📏',t:'Share your measurements',src:'Waist and height',kind:'step',time:'5 min',ai:'How do I measure my waist and height correctly?'},
+    {i:'〰️',t:'Your first movement check',src:'A simple sit-to-stand',kind:'step',time:'1 min',ai:'How do I do the sit-to-stand movement check safely?'},
+    {i:'🧘',t:'Get your fitness plan',src:'A few quick questions',kind:'step',time:'5 min',ai:'What questions will you ask to build my fitness plan?'},
   ])}
   ${fromTeam}`;
 
@@ -871,7 +871,7 @@ const DOCS={
   intake:{title:'Weight management intake form',action:'Start the form',
     done:'Opening your intake form.',
     body:['This form gathers your health history, weight goals, and everyday habits around nutrition, sleep, and activity.',
-      'It also includes two short, required screenings: the PHQ-2 for mood, and the STEADI fall-risk check for adults 65 and older.',
+      'It also includes two quick, standard check-ins: one about your mood, and one about your balance and steadiness.',
       'You can save and come back anytime. It takes about 10 minutes.']}
 };
 function openDoc(key){
