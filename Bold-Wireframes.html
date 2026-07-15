@@ -809,14 +809,14 @@ const messages = ()=>`
 
 /* ---------- side note per tab ---------- */
 const notes = {
-  today:{h:'Today — the checklist, across 5 states',p:'No “Today’s Plan” concept — just a <b>checklist</b> whose contents change by clinical state. It mixes two item types: <b>to-do tasks</b> the system can verify (labs, measurements) and <b>honor-system habits</b> it can’t (water, protein, movement).',k:[
-    ['State 1 · Paperwork','Checklist is all verifiable setup tasks — intake, measurements, PCP, labs.'],
-    ['State 2 · Pre-visit','Foundational movement + education while waiting. Honest that the personalized plan comes after the visit.'],
-    ['State 3 · Post-visit → labs','Checklist mixes a real task (complete labs) with honor habits from Dr. Desai’s care plan.'],
-    ['State 4 · On medication','Med check-in folds into the header; checklist is eased-in honor habits.'],
-    ['State 5 · Maintenance','Shows the logging future: watch-synced movement + tap-to-count water.'],
+  today:{h:'Today — the checklist, across 5 states',p:'No separate “Today’s Plan” — the tab is one <b>checklist</b> whose contents change by clinical state. It mixes <b>to-do tasks</b> the system can verify (forms, labs) with <b>honor-system habits</b> it can’t (protein, water, movement), plus a program card and a reading rail below.',k:[
+    ['State 1 · Paperwork','The first visit shows as “on hold.” Checklist is the required consents (HIPAA, New Patient Agreement, Telemedicine) plus the intake form (PHQ-2, STEADI). Forms open a review-and-sign page.'],
+    ['State 2 · Pre-visit','Visit confirmed. Foundational movement + education while waiting, honest that the personalized plan comes after the visit.'],
+    ['State 3 · Post-visit → labs','A real task (complete labs) alongside a trainer-led class and tap-to-log protein & water from Dr. Desai’s care plan.'],
+    ['State 4 · On medication','Med check-in folds into the header. Checklist leads with “take your medication” (opens a side-effect check), then the class and tap-to-log habits; a refill-review banner sits below.'],
+    ['State 5 · Maintenance','Steady habits: the trainer-led class plus tap-to-log protein & water, a momentum module, and next-visit prep.'],
     ['Med check-in','Lives in the header (greeting block) for medication states — one strip, not a separate card.'],
-    ['Bold is here','The greeting is the way in; per-item “Ask Bold,” a “how am I doing?” entry, and natural-language logging.']
+    ['Bold is here','The greeting is the way in; per-item “Ask Bold,” and natural-language logging.']
   ]},
   care:{h:'Care — the human layer',p:'Makes supervision tangible: the accountability partner made visible.',k:[
     ['Care team','Faces + roles, one tap to message.'],
