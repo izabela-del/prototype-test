@@ -706,8 +706,8 @@ const todayS3 = ()=>`
   ${checklist('From Dr. Desai’s care plan',[
     {i:'🩸',t:'Complete your lab work',src:'Dr. Desai ordered baseline labs · results go straight to them',kind:'task',cta:'Start',ai:'Where’s my nearest Quest, and how do I prepare for the draw?'},
     {i:'🧘',t:'Lower-body strength',src:'With Nadia · 3× this week',img:trainerPhoto,dur:'22 min',ai:'Here’s your 22-minute lower-body strength class with Nadia. Want me to start it?',pills:[{c:'Why strength training?',a:'Strength protects your muscle as you lose weight — that’s what keeps you independent. Here’s why it matters most for you.'},{c:'Open your Bold movement plan',a:'This is part of your Bold weight-management program. Here’s your full movement plan and this week’s recommended classes.'}]},
-    {i:'🍗',t:'Eat 100g of protein',src:'Protects your muscle',type:'tally',n:0,target:100,step:10,unit:'g',ai:'What does 100g of protein look like in a day?',aiLabel:'Easy protein ideas',topic:'protein',timevar:'protein'},
-    {i:'💧',t:'Drink 6 cups of water',src:'Protects your kidneys',type:'tally',n:0,target:6,ai:'I struggle to drink enough — any tips?',aiLabel:'Tips to drink more',topic:'water',timevar:'water'},
+    {i:'🍗',t:'Eat protein',type:'tally',n:0,target:100,step:10,unit:'g',ai:'What does 100g of protein look like in a day?',aiLabel:'Easy protein ideas',topic:'protein',timevar:'protein'},
+    {i:'💧',t:'Drink water',type:'tally',n:0,target:6,unit:'cups',ai:'I struggle to drink enough — any tips?',aiLabel:'Tips to drink more',topic:'water',timevar:'water'},
   ])}
   ${programCard(0,16)}
   ${fromTeam}`;
@@ -718,8 +718,8 @@ const todayS4 = ()=>`
   ${checklist('',[
     {i:'💊',t:'Take your medication',src:'Your weekly dose · check in for side effects after',kind:'med'},
     {i:'🧘',t:'Lower-body strength',src:'With Nadia · 3× this week',img:trainerPhoto,dur:'22 min',ai:'Here’s your 22-minute lower-body strength class with Nadia. Want me to start it?',pills:[{c:'Why strength training?',a:'Strength protects your muscle as you lose weight — that’s what keeps you independent. Here’s why it matters most for you.'},{c:'Open your Bold movement plan',a:'This is part of your Bold weight-management program. Here’s your full movement plan and this week’s recommended classes.'}]},
-    {i:'🍗',t:'Eat 100g of protein',src:'Protects your muscle',type:'tally',n:30,target:100,step:10,unit:'g',ai:'What does 100g of protein look like in a day?',aiLabel:'Easy protein ideas',topic:'protein',timevar:'protein'},
-    {i:'💧',t:'Drink 6 cups of water',src:'Protects your kidneys',type:'tally',n:2,target:6,ai:'I struggle to drink enough — any tips?',aiLabel:'Tips to drink more',topic:'water',timevar:'water'},
+    {i:'🍗',t:'Eat protein',type:'tally',n:30,target:100,step:10,unit:'g',ai:'What does 100g of protein look like in a day?',aiLabel:'Easy protein ideas',topic:'protein',timevar:'protein'},
+    {i:'💧',t:'Drink water',type:'tally',n:2,target:6,unit:'cups',ai:'I struggle to drink enough — any tips?',aiLabel:'Tips to drink more',topic:'water',timevar:'water'},
   ])}
   ${programCard(4,16)}
   <div class="banner amber"><span>⏱</span><div><b>Refill review in 6 days</b>Medications aren’t auto-renewed. Tap to see what to have ready and book your telehealth visit.</div></div>
@@ -739,8 +739,8 @@ const todayS5 = ()=>`
   </div>
   ${checklist('From your care plan',[
     {i:'🧘',t:'Lower-body strength',src:'With Nadia · 3× this week',img:trainerPhoto,dur:'22 min',ai:'Here’s your 22-minute lower-body strength class with Nadia. Want me to start it?',pills:[{c:'Why strength training?',a:'Strength protects your muscle as you lose weight — that’s what keeps you independent. Here’s why it matters most for you.'},{c:'Open your Bold movement plan',a:'This is part of your Bold weight-management program. Here’s your full movement plan and this week’s recommended classes.'}]},
-    {i:'🍗',t:'Eat 100g of protein',src:'Protects your muscle',type:'tally',n:40,target:100,step:10,unit:'g',ai:'What does 100g of protein look like in a day?',aiLabel:'Easy protein ideas',topic:'protein',timevar:'protein'},
-    {i:'💧',t:'Drink 6 cups of water',src:'Protects your kidneys',type:'tally',n:3,target:6,ai:'I struggle to drink enough — any tips?',aiLabel:'Tips to drink more',topic:'water',timevar:'water'},
+    {i:'🍗',t:'Eat protein',type:'tally',n:40,target:100,step:10,unit:'g',ai:'What does 100g of protein look like in a day?',aiLabel:'Easy protein ideas',topic:'protein',timevar:'protein'},
+    {i:'💧',t:'Drink water',type:'tally',n:3,target:6,unit:'cups',ai:'I struggle to drink enough — any tips?',aiLabel:'Tips to drink more',topic:'water',timevar:'water'},
   ])}
   <p class="honor"><b>Where this grows:</b> log water and protein with a tap, and start trainer-led classes right from your plan — same gentle reminders, less typing.</p>
   ${programCard(10,16)}
