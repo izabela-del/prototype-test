@@ -23,11 +23,13 @@
   *{box-sizing:border-box;-webkit-font-smoothing:antialiased}
   body{margin:0;font-family:var(--sans);color:var(--ink);background:#ECECF2;line-height:1.45}
   .page{max-width:1180px;margin:0 auto;padding:28px 20px 80px}
-  .head h1{font-family:var(--serif);font-size:30px;margin:0 0 4px}
-  .head p{color:var(--ink-2);margin:0 0 18px;max-width:760px}
-  .controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:14px 0 26px}
-  .seg{display:inline-flex;background:#fff;border:1px solid var(--line);border-radius:12px;padding:4px;gap:2px;box-shadow:var(--shadow)}
-  .seg button{border:0;background:transparent;font-family:var(--sans);font-size:13.5px;font-weight:600;color:var(--ink-2);padding:8px 14px;border-radius:9px;cursor:pointer;white-space:nowrap}
+  .eyebrow{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--purple);margin-bottom:8px}
+  .head h1{font-family:var(--serif);font-size:32px;letter-spacing:-.01em;margin:0 0 6px}
+  .head p{color:var(--ink-2);margin:0 0 18px;max-width:680px;font-size:15px}
+  .controls{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:16px 0 26px}
+  .seg{display:inline-flex;background:#fff;border:1px solid var(--line);border-radius:100px;padding:4px;gap:2px}
+  .seg button{border:0;background:transparent;font-family:var(--sans);font-size:13px;font-weight:600;color:var(--muted);padding:8px 15px;border-radius:100px;cursor:pointer;white-space:nowrap;transition:background .15s,color .15s}
+  .seg button:hover{color:var(--ink)}
   .seg button.on{background:var(--purple);color:#fff}
   .hint{color:var(--muted);font-size:12.5px}
   .stage{display:flex;gap:34px;align-items:flex-start;flex-wrap:wrap;justify-content:center}
@@ -200,10 +202,7 @@
   .planbar b{color:var(--ink)}
   .lock{display:flex;gap:8px;align-items:center;background:#FAFAFC;border:1px dashed var(--line);border-radius:12px;padding:11px 13px;font-size:12.5px;color:var(--muted);margin-bottom:12px}
   .trust{background:#F7F3FF;border:1px solid #E6DCFB}
-  body.focused .opt{display:none !important}
-  body.focused .qrow{display:none}
-  .movednote{font-size:11px;color:var(--muted);margin:-4px 2px 12px;display:none}
-  body.focused .movednote{display:block}
+  .movednote{display:none}
 
   .finebtn{width:100%;border:1.5px solid var(--teal);background:#fff;color:var(--teal-2);border-radius:11px;padding:12px;font-weight:700;font-size:14px;cursor:pointer;font-family:var(--sans);margin-top:8px}
   .finebtn:hover{background:#EAF9F6}
@@ -356,16 +355,15 @@
   .note .k{display:flex;gap:8px;font-size:12.5px;color:var(--ink-2);margin-bottom:7px;align-items:flex-start}
   .note .k b{color:var(--ink)}
   .note .note-model{font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:10px;margin-top:2px}
-  .legend span{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-2);margin-right:12px}
-  .sw{width:12px;height:12px;border-radius:3px;display:inline-block}
   @media(max-width:560px){.phone{transform:scale(.95);transform-origin:top center}}
 </style>
 </head>
 <body>
 <div class="page">
   <div class="head">
-    <h1>Bold Care — Member App Wireframes</h1>
-    <p>Low-fidelity, clickable. Switch tabs at the bottom of the phone. For <b>Today</b>, use the state switcher to step through all five clinical states — the checklist changes with each. On <b>Today</b>, Bold’s main entry point is the <b>“Good morning, Carol” greeting</b> itself — tap it, its ask field, or a suggested prompt. A small <b>Ask Bold</b> sits in the header on every screen, plus inline purple “ask” chips in context. Styled to match the existing Home design.</p>
+    <div class="eyebrow">Bold · Member app</div>
+    <h1>Member app wireframes</h1>
+    <p>Low-fidelity and clickable. Switch tabs at the bottom of the phone, and use the state switcher to step through the five clinical states — the Today checklist changes with each. Tap the greeting or any “Ask Bold” chip to open the assistant.</p>
   </div>
 
   <div class="controls">
@@ -377,20 +375,6 @@
       <button data-v="s5">5 · Maintenance</button>
     </div>
     <span class="hint">← The checklist changes across your 5 clinical states (only affects the Today tab)</span>
-  </div>
-  <div class="controls">
-    <div class="seg" id="densitySeg">
-      <button class="on" data-den="focused">Focused (recommended)</button>
-      <button data-den="full">Full</button>
-    </div>
-    <span class="hint">Density — Focused hides secondary content (education, extra stats, full directive list) so Today leads with one clear action</span>
-  </div>
-  <div class="legend" style="margin-bottom:16px">
-    <span><i class="sw" style="background:#6D28D9"></i>Primary action</span>
-    <span><i class="sw" style="background:#0FB5A0"></i>Confirmation / success</span>
-    <span><i class="sw" style="background:#12A150"></i>Completed</span>
-    <span><i class="sw" style="background:#B7791F"></i>Attention</span>
-    <span><i class="sw" style="background:#C0392B"></i>Safety / urgent</span>
   </div>
 
   <div class="stage">
@@ -984,13 +968,6 @@ function setMsg(m){msgTab=m;render();}
 document.querySelectorAll('#tabbar .tab').forEach(b=>b.onclick=()=>go(b.dataset.t));
 document.querySelectorAll('#variantSeg button').forEach(b=>b.onclick=()=>{variant=b.dataset.v;tab='today';render();});
 
-let density='focused';
-function applyDensity(){
-  document.body.classList.toggle('focused',density==='focused');
-  document.querySelectorAll('#densitySeg button').forEach(b=>b.classList.toggle('on',b.dataset.den===density));
-}
-document.querySelectorAll('#densitySeg button').forEach(b=>b.onclick=()=>{density=b.dataset.den;applyDensity();});
-applyDensity();
 render();
 </script>
 </body>
