@@ -82,6 +82,7 @@
   .honor{font-size:12px;color:var(--muted);margin:9px 2px 2px;line-height:1.5}
   .honor b{color:var(--ink-2)}
   .chkintro{font-size:13px;color:var(--muted);margin:-2px 2px 12px;line-height:1.5}
+  .clink{color:var(--purple);font-weight:700;cursor:pointer;white-space:nowrap}
   .docwrap{max-height:46vh;overflow-y:auto;margin-bottom:14px;padding-right:4px}
   .docp{font-size:14px;color:var(--ink-2);line-height:1.55;margin-bottom:12px}
   .docp b{color:var(--ink)}
@@ -669,7 +670,7 @@ const todayS1 = ()=>`
     {i:'💻',t:'Telemedicine consent',src:'Care by video, and when to call 911',kind:'task',cta:'Review',doc:'telemedicine'},
     {i:'📝',t:'Weight management intake form',src:'Health history and habits, plus the PHQ-2 and STEADI screenings',kind:'task',cta:'Start',doc:'intake'},
   ])}
-  <p class="chkintro">A Care Coordinator will walk you through the three consents by phone and note your verbal okay, so nothing holds up your visit.</p>
+  <p class="chkintro">Have questions? <span class="clink" onclick="openAI('Care Coordinator','Happy to set up a quick call with your Care Coordinator to walk you through any of these forms. Want me to find a time?')">Schedule a call with a Care Coordinator ›</span></p>
   ${fromTeam}`;
 
 /* STATE 2 — Paperwork done → Visit (pre-visit, foundational, honest it’s not personalized yet) */
