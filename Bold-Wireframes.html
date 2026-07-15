@@ -346,7 +346,8 @@
   .ctx{font-size:11.5px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.4px;margin:2px 0 8px}
   .aiInput{display:flex;gap:8px;padding:12px 14px;background:#fff;border-top:1px solid var(--line)}
   .aiInput input{flex:1;border:1.5px solid var(--line);border-radius:22px;padding:11px 14px;font-size:13.5px;font-family:var(--sans)}
-  .aiInput button{border:0;background:var(--purple);color:#fff;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer}
+  .aiInput button{border:0;background:var(--purple);color:#fff;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex:0 0 42px}
+  .aiInput .mic{background:#fff;border:1.5px solid var(--line);color:var(--ink-2)}
 
   .note{max-width:300px;flex:0 0 300px;align-self:flex-start;background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:var(--shadow)}
   .note h3{font-family:var(--serif);font-size:17px;margin:0 0 8px}
@@ -405,7 +406,7 @@
           <div class="aiSheet">
             <div class="aiHead"><span class="sp" id="aiSphere"></span><span class="nm" id="aiName">Bold</span><button class="cl" onclick="closeAI()">×</button></div>
             <div class="aiBody" id="aiBody"></div>
-            <div class="aiInput" id="aiInputWrap"><input placeholder="Type your question…"><button>↑</button></div>
+            <div class="aiInput" id="aiInputWrap"><button class="mic" title="Ask by voice">🎤</button><input placeholder="Ask anything…"><button>↑</button></div>
           </div>
         </div>
 
@@ -563,7 +564,7 @@ function planItem(it){
   else top='<button class="ci-done'+(it.done?' on':'')+'" onclick="markDone(this)"><span class="ci-circle">✓</span><span class="ci-label">Done</span></button>';
   var pills='';
   if(it.pills) pills=it.pills.map(function(p){return '<button class="ci-pill" onclick="event.stopPropagation();openAI(\''+p.c+'\',\''+p.a+'\')">'+p.c+'</button>';}).join('');
-  else if(it.kind!=='task' && it.ai && it.aiLabel) pills='<button class="ci-pill" onclick="event.stopPropagation();openAI(\''+it.t+'\',\''+it.ai+'\')">'+it.aiLabel+'</button>';
+  else if(it.kind!=='task' && it.aiLabel && (it.topic||it.ai)) pills='<button class="ci-pill" onclick="event.stopPropagation();'+(it.topic?('openTopic(\''+it.topic+'\')'):('openAI(\''+it.t+'\',\''+it.ai+'\')'))+'">'+it.aiLabel+'</button>';
   return '<div class="'+cardCls+'"'+cardAttr+'>'+
     '<div class="ci-body">'+
       '<div class="ci-head">'+(it.img?'<span class="ci-icon ci-photo" style="background-image:url(\''+it.img+'\')"></span>':'<span class="ci-icon">'+it.i+'</span>')+'<p class="ci-title">'+it.t+'</p>'+top+'</div>'+
@@ -694,8 +695,8 @@ const todayS3 = ()=>`
   ${checklist('From Dr. Desai’s care plan',[
     {i:'🩸',t:'Complete your lab work',src:'Dr. Desai ordered baseline labs · results go straight to them',kind:'task',cta:'Start',ai:'Where’s my nearest Quest, and how do I prepare for the draw?'},
     {i:'🧘',t:'Lower-body strength',src:'With Nadia · 3× this week',img:trainerPhoto,dur:'22 min',ai:'Here’s your 22-minute lower-body strength class with Nadia. Want me to start it?',pills:[{c:'Why strength training?',a:'Strength protects your muscle as you lose weight — that’s what keeps you independent. Here’s why it matters most for you.'},{c:'Open your Bold movement plan',a:'This is part of your Bold weight-management program. Here’s your full movement plan and this week’s recommended classes.'}]},
-    {i:'🍗',t:'Eat 100g of protein',src:'Protects your muscle',type:'tally',n:0,target:100,step:10,unit:'g',ai:'What does 100g of protein look like in a day?',aiLabel:'Easy protein ideas'},
-    {i:'💧',t:'Drink 6 cups of water',src:'Protects your kidneys',type:'tally',n:0,target:6,ai:'I struggle to drink enough — any tips?',aiLabel:'Tips to drink more'},
+    {i:'🍗',t:'Eat 100g of protein',src:'Protects your muscle',type:'tally',n:0,target:100,step:10,unit:'g',ai:'What does 100g of protein look like in a day?',aiLabel:'Easy protein ideas',topic:'protein'},
+    {i:'💧',t:'Drink 6 cups of water',src:'Protects your kidneys',type:'tally',n:0,target:6,ai:'I struggle to drink enough — any tips?',aiLabel:'Tips to drink more',topic:'water'},
   ])}
   ${programCard(0,16)}
   ${fromTeam}`;
@@ -706,8 +707,8 @@ const todayS4 = ()=>`
   ${checklist('',[
     {i:'💊',t:'Take your medication',src:'Your weekly dose · check in for side effects after',kind:'med'},
     {i:'🧘',t:'Lower-body strength',src:'With Nadia · 3× this week',img:trainerPhoto,dur:'22 min',ai:'Here’s your 22-minute lower-body strength class with Nadia. Want me to start it?',pills:[{c:'Why strength training?',a:'Strength protects your muscle as you lose weight — that’s what keeps you independent. Here’s why it matters most for you.'},{c:'Open your Bold movement plan',a:'This is part of your Bold weight-management program. Here’s your full movement plan and this week’s recommended classes.'}]},
-    {i:'🍗',t:'Eat 100g of protein',src:'Protects your muscle',type:'tally',n:30,target:100,step:10,unit:'g',ai:'What does 100g of protein look like in a day?',aiLabel:'Easy protein ideas'},
-    {i:'💧',t:'Drink 6 cups of water',src:'Protects your kidneys',type:'tally',n:2,target:6,ai:'I struggle to drink enough — any tips?',aiLabel:'Tips to drink more'},
+    {i:'🍗',t:'Eat 100g of protein',src:'Protects your muscle',type:'tally',n:30,target:100,step:10,unit:'g',ai:'What does 100g of protein look like in a day?',aiLabel:'Easy protein ideas',topic:'protein'},
+    {i:'💧',t:'Drink 6 cups of water',src:'Protects your kidneys',type:'tally',n:2,target:6,ai:'I struggle to drink enough — any tips?',aiLabel:'Tips to drink more',topic:'water'},
   ])}
   ${programCard(4,16)}
   <div class="banner amber"><span>⏱</span><div><b>Refill review in 6 days</b>Medications aren’t auto-renewed. Tap to see what to have ready and book your telehealth visit.</div></div>
@@ -727,8 +728,8 @@ const todayS5 = ()=>`
   </div>
   ${checklist('From your care plan',[
     {i:'🧘',t:'Lower-body strength',src:'With Nadia · 3× this week',img:trainerPhoto,dur:'22 min',ai:'Here’s your 22-minute lower-body strength class with Nadia. Want me to start it?',pills:[{c:'Why strength training?',a:'Strength protects your muscle as you lose weight — that’s what keeps you independent. Here’s why it matters most for you.'},{c:'Open your Bold movement plan',a:'This is part of your Bold weight-management program. Here’s your full movement plan and this week’s recommended classes.'}]},
-    {i:'🍗',t:'Eat 100g of protein',src:'Protects your muscle',type:'tally',n:40,target:100,step:10,unit:'g',ai:'What does 100g of protein look like in a day?',aiLabel:'Easy protein ideas'},
-    {i:'💧',t:'Drink 6 cups of water',src:'Protects your kidneys',type:'tally',n:3,target:6,ai:'I struggle to drink enough — any tips?',aiLabel:'Tips to drink more'},
+    {i:'🍗',t:'Eat 100g of protein',src:'Protects your muscle',type:'tally',n:40,target:100,step:10,unit:'g',ai:'What does 100g of protein look like in a day?',aiLabel:'Easy protein ideas',topic:'protein'},
+    {i:'💧',t:'Drink 6 cups of water',src:'Protects your kidneys',type:'tally',n:3,target:6,ai:'I struggle to drink enough — any tips?',aiLabel:'Tips to drink more',topic:'water'},
   ])}
   <p class="honor"><b>Where this grows:</b> log water and protein with a tap, and start trainer-led classes right from your plan — same gentle reminders, less typing.</p>
   ${programCard(10,16)}
@@ -887,6 +888,33 @@ function docDone(key){
   document.getElementById('aiBody').innerHTML =
     '<div class="bubble" style="background:var(--green-soft);border:1px solid #BDE9CD;max-width:100%">✓ '+(d.done||'Recorded.')+'</div>'+
     '<p class="d" style="text-align:center;margin-top:8px">You can close this and come back anytime.</p>';
+}
+/* Chat entry points: open with the answer already given, plus related follow-up pills. */
+const TOPICS={
+  water:{ctx:'Drinking enough water',
+    a:'A few easy wins: keep a filled bottle where you sit, take a sip with every meal and every medication, and add lemon or cucumber if plain water feels boring. Six cups spread through the day is easier than a few big glasses.',
+    follow:[
+      ['How much should I drink?','For most older adults, about 6 to 8 cups a day is a good target. Your care team may adjust it based on your medications and kidney health.'],
+      ['Do coffee and tea count?','Mostly yes. Unsweetened coffee and tea count toward your fluids. Lead with water and go easy on very sugary drinks.'],
+      ['I keep forgetting','Tie it to habits you already have: a glass when you wake up, one with each meal, and one with your medication. The tap-to-log counter here is a gentle nudge too.']
+    ]},
+  protein:{ctx:'Getting enough protein',
+    a:'Easy high-protein foods: eggs, Greek yogurt, cottage cheese, chicken, fish, tofu, and beans. Spread them across the day so you reach your goal without cramming it all into dinner.',
+    follow:[
+      ['What does 100g look like?','Two eggs, a bowl of Greek yogurt, a chicken breast, and beans or tofu at dinner will get you close to 100g.'],
+      ['Quick protein snacks','Greek yogurt, a hard-boiled egg, a handful of edamame, or cottage cheese with fruit are all quick wins.'],
+      ['Why does protein matter?','It protects your muscle while you lose weight, so you stay strong and steady. Muscle is easy to lose and hard to rebuild.']
+    ]}
+};
+function openTopic(key){var t=TOPICS[key];if(!t)return;window._topic=t;renderAnswer(t.ctx,t.a,t.follow);}
+function followAns(i){var t=window._topic;if(!t||!t.follow[i])return;renderAnswer(t.ctx,t.follow[i][1],t.follow);}
+function renderAnswer(ctx,answer,follow){
+  setHead('Bold',true);
+  var fh=(follow&&follow.length)?'<div class="ctx" style="margin-top:14px">You might also ask</div><div class="qr">'+follow.map(function(x,i){return '<button onclick="followAns('+i+')">'+x[0]+'</button>';}).join('')+'</div>':'';
+  document.getElementById('aiBody').innerHTML=
+    '<div class="ctx">Context · '+ctx+'</div><div class="bubble ai">'+answer+'</div>'+fh+
+    '<div class="ctx" style="margin-top:14px">Need a person?</div><div class="qr"><button onclick="closeAI();go(\'msg\')">Get my care team ›</button></div>';
+  document.getElementById('aiPanel').classList.add('open');
 }
 function openAI(ctx,msg){
   setHead('Bold',true);
