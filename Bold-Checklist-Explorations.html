@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bold — Checklist Card System & Explorations</title>
+<style>
+  :root{
+    --purple:#6D28D9;--purple-soft:#F3EEFF;--teal:#0FB5A0;--green:#12A150;--green-soft:#E8F7EE;
+    --amber:#B7791F;--amber-soft:#FEF6E7;--ink:#17172B;--ink-2:#4A4A63;--muted:#8A8AA0;
+    --line:#EAEAF0;--bg:#F6F6F9;--card:#fff;
+    --blue:linear-gradient(140deg,#7DA8FF,#4E76E8);
+    --shadow:0 2px 10px rgba(20,20,50,.06),0 1px 3px rgba(20,20,50,.05);
+    --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:var(--sans);background:#ECECF2;color:var(--ink);line-height:1.45}
+  .wrap{max-width:1240px;margin:0 auto;padding:30px 22px 80px}
+  h1{font-family:var(--serif);font-size:30px;margin:0 0 4px}
+  .lede{color:var(--ink-2);max-width:840px;margin:0 0 6px}
+  h2.sec{font-family:var(--serif);font-size:22px;margin:34px 0 4px}
+  .sub{color:var(--muted);font-size:13.5px;margin:0 0 18px;max-width:840px}
+
+  /* ---------- atoms ---------- */
+  .globe{position:relative;width:15px;height:15px;border-radius:50%;display:inline-block;overflow:hidden;flex:0 0 15px;
+    background:radial-gradient(130% 130% at 32% 26%,#E3DAFF,#BBA9F7 46%,#9C8AEE 82%,#8B79E8);
+    box-shadow:inset 1px 1px 2px rgba(255,255,255,.6);animation:gB 5.5s ease-in-out infinite}
+  .globe::before{content:"";position:absolute;inset:0;border-radius:50%;background:radial-gradient(46% 42% at 34% 28%,rgba(255,255,255,.9),transparent 70%);animation:gD 7s ease-in-out infinite}
+  @keyframes gB{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+  @keyframes gD{0%,100%{transform:translate(0,0)}50%{transform:translate(8%,6%)}}
+  @media(prefers-reduced-motion:reduce){.globe,.globe::before{animation:none}}
+
+  .chip{width:40px;height:40px;border-radius:12px;background:var(--blue);flex:0 0 40px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;box-shadow:0 4px 10px rgba(78,118,232,.28)}
+  .chip.sq{border-radius:11px}
+  .ttl{font-weight:700;font-size:14.5px;margin:0}
+  .desc{color:var(--ink-2);font-size:12.5px;margin:2px 0 0}
+  .cad{display:inline-block;color:var(--purple);background:var(--purple-soft);font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px}
+  .src{font-size:11.5px;color:var(--muted);font-weight:600}
+
+  .pill{display:inline-flex;align-items:center;gap:7px;background:#fff;border:1.5px solid var(--line);color:var(--ink-2);font-size:12px;font-weight:700;padding:6px 9px 6px 12px;border-radius:20px;cursor:pointer;font-family:var(--sans)}
+  .pill:hover{border-color:var(--purple);color:var(--purple)}
+
+  .done{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--line);background:#fff;border-radius:20px;padding:7px 13px;font-size:12.5px;font-weight:700;color:var(--ink-2);cursor:pointer;font-family:var(--sans);white-space:nowrap}
+  .done .box{width:15px;height:15px;border:1.5px solid var(--muted);border-radius:5px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;color:#fff}
+  .done.on{border-color:var(--green);color:var(--green);background:var(--green-soft)}
+  .done.on .box{background:var(--green);border-color:var(--green)}
+
+  .checkc{width:26px;height:26px;border-radius:50%;border:2px solid #CBcBD8;background:#fff;cursor:pointer;flex:0 0 26px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px}
+  .checkc.on{background:var(--green);border-color:var(--green)}
+
+  .dots{display:flex;gap:5px}
+  .dots i{width:9px;height:9px;border-radius:50%;background:#DcDcE6;display:inline-block}
+  .dots i.f{background:var(--green)}
+
+  .tally{display:inline-flex;align-items:center;gap:8px}
+  .tally b{font-size:12.5px;min-width:42px;text-align:center;color:var(--purple)}
+  .tstep{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--line);background:#fff;font-size:15px;cursor:pointer;color:var(--purple);line-height:1;padding:0}
+
+  .synced{color:var(--purple);background:var(--purple-soft);font-size:11px;font-weight:700;padding:5px 10px;border-radius:20px;white-space:nowrap}
+
+  /* atom gallery */
+  .atoms{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+  .atom{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;box-shadow:var(--shadow)}
+  .atom .cap{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);margin-bottom:10px}
+  .atom .demo{display:flex;align-items:center;gap:10px;flex-wrap:wrap;min-height:44px}
+  .atom .note{font-size:11.5px;color:var(--muted);margin-top:10px;line-height:1.4}
+
+  /* variation grid */
+  .vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:22px;align-items:start}
+  .vcol{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:var(--shadow)}
+  .vhead{display:flex;align-items:baseline;gap:8px;margin-bottom:2px}
+  .vtag{font-size:11px;font-weight:800;color:#fff;background:var(--purple);border-radius:6px;padding:2px 7px}
+  .vname{font-weight:800;font-size:15px}
+  .vwhen{font-size:12px;color:var(--muted);margin:2px 0 14px;line-height:1.45}
+  .canvas{background:var(--bg);border-radius:14px;padding:12px}
+
+  .row{display:flex;gap:12px;align-items:flex-start}
+  .grow{flex:1;min-width:0}
+  .mt6{margin-top:6px}.mt10{margin-top:10px}
+  .pillrow{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px}
+
+  /* shared item cards */
+  .listcard{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
+  .listcard .item{padding:13px 14px;border-bottom:1px solid var(--line)}
+  .listcard .item:last-child{border-bottom:0}
+  .stand{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:14px;margin-bottom:10px}
+  .stand:last-child{margin-bottom:0}
+  .foot{display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--line);margin-top:12px;padding-top:11px}
+  .ml-auto{margin-left:auto}
+  .cnt{font-size:12.5px;color:var(--muted);font-weight:600}
+  .exp .item{cursor:pointer}
+  .exp .detail{display:none;padding-top:10px}
+  .exp .item.open .detail{display:block}
+  .chev{color:var(--muted);font-size:13px;margin-left:auto;transition:transform .15s}
+  .exp .item.open .chev{transform:rotate(90deg)}
+  .legend{margin:6px 0 0;font-size:12px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Bold — Checklist Card System</h1>
+  <p class="lede">Components first, then card layouts built from them. Same three sample items across every layout so you can compare apples to apples. Tap the <b>Done</b> toggles, checkboxes, counters, and rows — they're live.</p>
+
+  <!-- ===================== COMPONENTS ===================== -->
+  <h2 class="sec">1 · Components (atoms)</h2>
+  <p class="sub">The building blocks. Every card variation is assembled from these, so a change here propagates everywhere.</p>
+  <div class="atoms">
+    <div class="atom"><div class="cap">Icon chip</div><div class="demo"><span class="chip">🏋️</span><span class="chip">🍗</span><span class="chip">💧</span></div><div class="note">Blue gradient, 40px, white glyph. Category at a glance.</div></div>
+    <div class="atom"><div class="cap">Title + description</div><div class="demo"><div><p class="ttl">Eat 140g of protein</p><p class="desc">Across your meals · protects muscle</p></div></div><div class="note">Title = the action. Description = the why, muted.</div></div>
+    <div class="atom"><div class="cap">Cadence tag</div><div class="demo"><span class="cad">Daily</span><span class="cad">2× / week</span></div><div class="note">How often. Replaces vague copy with a scannable rhythm.</div></div>
+    <div class="atom"><div class="cap">Source line</div><div class="demo"><span class="src">From Dr. Desai’s care plan</span></div><div class="note">Provenance = trust. Ties the item to their clinician.</div></div>
+    <div class="atom"><div class="cap">Done toggle (honor)</div><div class="demo"><span class="done" onclick="this.classList.toggle('on')"><span class="box">✓</span>Done</span><span class="done on"><span class="box">✓</span>Done</span></div><div class="note">Optional self-report for habits. Off / on.</div></div>
+    <div class="atom"><div class="cap">Check circle</div><div class="demo"><span class="checkc" onclick="this.classList.toggle('on')"></span><span class="checkc on">✓</span></div><div class="note">Bigger tap target, list-native. Off / on.</div></div>
+    <div class="atom"><div class="cap">Progress dots</div><div class="demo"><span class="dots"><i class="f"></i><i></i></span><span class="dots"><i class="f"></i><i class="f"></i><i class="f"></i></span></div><div class="note">Weekly cadence made visual (1 of 2, 3 of 3).</div></div>
+    <div class="atom"><div class="cap">Tally counter</div><div class="demo"><span class="tally"><button class="tstep" onclick="tstep(this,-1)">–</button><b data-n="3" data-t="6">3 of 6</b><button class="tstep" onclick="tstep(this,1)">+</button></span></div><div class="note">Granular logging (glasses, grams) — the “it’s 3pm” future.</div></div>
+    <div class="atom"><div class="cap">Ask pill (Bold)</div><div class="demo"><span class="pill">Ask Bold<span class="globe"></span></span><span class="pill">Why strength?<span class="globe"></span></span></div><div class="note">Contextual AI entry. The animated globe is Bold.</div></div>
+    <div class="atom"><div class="cap">Device badge</div><div class="demo"><span class="synced">⌚ 12 min today</span></div><div class="note">Auto-filled from a watch/scale — no manual entry.</div></div>
+    <div class="atom"><div class="cap">To-do vs habit</div><div class="demo"><span class="pill" style="border-color:var(--amber);color:var(--amber)">Find a location ›</span><span class="done"><span class="box">✓</span>Done</span></div><div class="note">Verifiable task (action CTA) vs honor habit (soft Done).</div></div>
+  </div>
+
+  <!-- ===================== VARIATIONS ===================== -->
+  <h2 class="sec">2 · Card layout variations</h2>
+  <p class="sub">Six ways to assemble the atoms into a checklist. Each shows the same items: a weekly strength task, daily protein, daily water.</p>
+  <div class="vgrid">
+
+    <!-- V1 unified list (current) -->
+    <div class="vcol">
+      <div class="vhead"><span class="vtag">A</span><span class="vname">Unified list</span></div>
+      <div class="vwhen">Today’s wireframe. One card, rows. Compact — but Done + pills compete for attention and it can feel busy.</div>
+      <div class="canvas">
+        <div class="cnt" style="margin-bottom:8px">Today’s Checklist (0/3 done)</div>
+        <div class="listcard">
+          <div class="item"><div class="row"><span class="chip">🏋️</span><div class="grow"><p class="ttl">Strength training</p><p class="desc">30 min × 2 a week</p><div class="pillrow"><span class="pill">Why strength?<span class="globe"></span></span><span class="pill">More<span class="globe"></span></span></div></div><span class="done ml-auto" onclick="this.classList.toggle('on')"><span class="box">✓</span>Done</span></div></div>
+          <div class="item"><div class="row"><span class="chip">🍗</span><div class="grow"><p class="ttl">Eat 140g of protein</p><p class="desc">Across your meals</p><div class="pillrow"><span class="pill">Ask Bold<span class="globe"></span></span></div></div><span class="done ml-auto" onclick="this.classList.toggle('on')"><span class="box">✓</span>Done</span></div></div>
+          <div class="item"><div class="row"><span class="chip">💧</span><div class="grow"><p class="ttl">Drink 6 cups of water</p><p class="desc">Through the day</p><div class="pillrow"><span class="pill">Ask Bold<span class="globe"></span></span></div></div><span class="done ml-auto" onclick="this.classList.toggle('on')"><span class="box">✓</span>Done</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- V2 standalone cards -->
+    <div class="vcol">
+      <div class="vhead"><span class="vtag">B</span><span class="vname">Standalone cards</span></div>
+      <div class="vwhen">Each item is its own card (matches the Figma frame). Roomier, calmer, easier to scan. Costs more vertical space.</div>
+      <div class="canvas">
+        <div class="cnt" style="margin-bottom:8px">Today’s Checklist (0/3 done)</div>
+        <div class="stand"><div class="row"><span class="chip">🏋️</span><div class="grow"><p class="ttl">Strength training 30 × 2 a week</p><p class="desc">Take a recommended class or do your own</p></div><span class="done ml-auto" onclick="this.classList.toggle('on')"><span class="box">✓</span>Done</span></div><div class="pillrow"><span class="pill">Why strength?<span class="globe"></span></span><span class="pill">More<span class="globe"></span></span></div></div>
+        <div class="stand"><div class="row"><span class="chip">🍗</span><div class="grow"><p class="ttl">Eat 140g of protein</p><p class="desc">Across your meals</p></div><span class="done ml-auto" onclick="this.classList.toggle('on')"><span class="box">✓</span>Done</span></div><div class="pillrow"><span class="pill">Ask Bold<span class="globe"></span></span></div></div>
+        <div class="stand"><div class="row"><span class="chip">💧</span><div class="grow"><p class="ttl">Drink 6 cups of water</p><p class="desc">Through the day</p></div><span class="done ml-auto" onclick="this.classList.toggle('on')"><span class="box">✓</span>Done</span></div><div class="pillrow"><span class="pill">Ask Bold<span class="globe"></span></span></div></div>
+      </div>
+    </div>
+
+    <!-- V3 checkbox-forward -->
+    <div class="vcol">
+      <div class="vhead"><span class="vtag">C</span><span class="vname">Checkbox-forward (calm)</span></div>
+      <div class="vwhen">Big check circle leads; title + cadence on one line; description small. The least busy — best for reducing overwhelm for 65+.</div>
+      <div class="canvas">
+        <div class="cnt" style="margin-bottom:8px">Today’s Checklist (0/3 done)</div>
+        <div class="listcard">
+          <div class="item"><div class="row"><span class="checkc" onclick="this.classList.toggle('on')"></span><div class="grow"><p class="ttl">Strength training <span class="cad" style="margin-left:4px">2× / wk</span></p><p class="desc">30 min · class or your own</p></div><span class="globe" title="Ask Bold" style="width:20px;height:20px;flex:0 0 20px;align-self:center"></span></div></div>
+          <div class="item"><div class="row"><span class="checkc" onclick="this.classList.toggle('on')"></span><div class="grow"><p class="ttl">Eat 140g of protein <span class="cad" style="margin-left:4px">Daily</span></p><p class="desc">Across your meals</p></div><span class="globe" style="width:20px;height:20px;flex:0 0 20px;align-self:center"></span></div></div>
+          <div class="item"><div class="row"><span class="checkc" onclick="this.classList.toggle('on')"></span><div class="grow"><p class="ttl">Drink 6 cups of water <span class="cad" style="margin-left:4px">Daily</span></p><p class="desc">Through the day</p></div><span class="globe" style="width:20px;height:20px;flex:0 0 20px;align-self:center"></span></div></div>
+        </div>
+        <p class="legend">Tap the globe to ask Bold about any item.</p>
+      </div>
+    </div>
+
+    <!-- V4 progress / cadence -->
+    <div class="vcol">
+      <div class="vhead"><span class="vtag">D</span><span class="vname">Progress &amp; cadence</span></div>
+      <div class="vwhen">Weekly items show dots (1 of 2); daily items a check circle. Completion feels like momentum, not a chore. Great for honor habits.</div>
+      <div class="canvas">
+        <div class="cnt" style="margin-bottom:8px">This week</div>
+        <div class="listcard">
+          <div class="item"><div class="row"><span class="chip">🏋️</span><div class="grow"><p class="ttl">Strength training</p><p class="desc mt6">30 min, twice a week</p><div class="dots mt10"><i class="f"></i><i></i></div></div><span class="pill ml-auto" style="align-self:center">Log it<span class="globe"></span></span></div></div>
+          <div class="item"><div class="row"><span class="chip">🍗</span><div class="grow"><p class="ttl">Eat 140g of protein</p><p class="desc">Daily · across your meals</p></div><span class="checkc on ml-auto" style="align-self:center">✓</span></div></div>
+          <div class="item"><div class="row"><span class="chip">💧</span><div class="grow"><p class="ttl">Drink 6 cups of water</p><p class="desc">Daily</p></div><span class="checkc ml-auto" onclick="this.classList.toggle('on')" style="align-self:center"></span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- V5 compact expandable -->
+    <div class="vcol">
+      <div class="vhead"><span class="vtag">E</span><span class="vname">Compact, tap to expand</span></div>
+      <div class="vwhen">One dense line per item; tap a row to reveal the why + Ask Bold. Densest — most items above the fold. Hides detail until wanted.</div>
+      <div class="canvas exp">
+        <div class="cnt" style="margin-bottom:8px">Today’s Checklist (0/3 done)</div>
+        <div class="listcard">
+          <div class="item" onclick="this.classList.toggle('open')"><div class="row" style="align-items:center"><span class="checkc" onclick="event.stopPropagation();this.classList.toggle('on')"></span><p class="ttl grow">Strength training</p><span class="cad">2× / wk</span><span class="chev">›</span></div><div class="detail"><p class="desc">30 min · a recommended class or your own.</p><div class="pillrow"><span class="pill">Why strength?<span class="globe"></span></span><span class="pill">More<span class="globe"></span></span></div></div></div>
+          <div class="item" onclick="this.classList.toggle('open')"><div class="row" style="align-items:center"><span class="checkc" onclick="event.stopPropagation();this.classList.toggle('on')"></span><p class="ttl grow">Eat 140g of protein</p><span class="cad">Daily</span><span class="chev">›</span></div><div class="detail"><p class="desc">Across your meals — protects your muscle.</p><div class="pillrow"><span class="pill">Ask Bold<span class="globe"></span></span></div></div></div>
+          <div class="item" onclick="this.classList.toggle('open')"><div class="row" style="align-items:center"><span class="checkc" onclick="event.stopPropagation();this.classList.toggle('on')"></span><p class="ttl grow">Drink 6 cups of water</p><span class="cad">Daily</span><span class="chev">›</span></div><div class="detail"><p class="desc">Through the day — protects your kidneys.</p><div class="pillrow"><span class="pill">Ask Bold<span class="globe"></span></span></div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- V6 split footer -->
+    <div class="vcol">
+      <div class="vhead"><span class="vtag">F</span><span class="vname">Split action bar</span></div>
+      <div class="vwhen">Item content up top; a clean footer row separates “Ask Bold” from “Done.” No competing controls in the title row — very legible.</div>
+      <div class="canvas">
+        <div class="cnt" style="margin-bottom:8px">Today’s Checklist (0/3 done)</div>
+        <div class="stand"><div class="row"><span class="chip">🏋️</span><div class="grow"><p class="ttl">Strength training</p><p class="desc">30 min × 2 a week</p></div><span class="cad ml-auto">2× / wk</span></div><div class="foot"><span class="pill">Why strength?<span class="globe"></span></span><span class="done" onclick="this.classList.toggle('on')"><span class="box">✓</span>Done</span></div></div>
+        <div class="stand"><div class="row"><span class="chip">🍗</span><div class="grow"><p class="ttl">Eat 140g of protein</p><p class="desc">Across your meals</p></div><span class="cad ml-auto">Daily</span></div><div class="foot"><span class="pill">Ask Bold<span class="globe"></span></span><span class="done" onclick="this.classList.toggle('on')"><span class="box">✓</span>Done</span></div></div>
+        <div class="stand"><div class="row"><span class="chip">💧</span><div class="grow"><p class="ttl">Drink 6 cups of water</p><p class="desc">Through the day</p></div><span class="cad ml-auto">Daily</span></div><div class="foot"><span class="pill">Ask Bold<span class="globe"></span></span><span class="done" onclick="this.classList.toggle('on')"><span class="box">✓</span>Done</span></div></div>
+      </div>
+    </div>
+
+  </div>
+
+  <p class="sub" style="margin-top:26px"><b>My take:</b> <b>C (Checkbox-forward)</b> or <b>B (Standalone cards)</b> for the calmest, most senior-friendly feel; <b>D (Progress &amp; cadence)</b> if you want habits to feel like momentum; <b>E (Compact)</b> if vertical space is the priority. Tell me which direction and I’ll build it into the main wireframe.</p>
+</div>
+
+<script>
+  function tstep(btn,d){var b=btn.parentNode.querySelector('b');var n=Math.max(0,Math.min(+b.dataset.t,+b.dataset.n+d));b.dataset.n=n;b.textContent=n+' of '+b.dataset.t;}
+</script>
+</body>
+</html>

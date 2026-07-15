@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bold — Priority Banner System</title>
+<style>
+  :root{
+    --purple:#6D28D9;--purple-2:#7C3AED;--purple-soft:#F3EEFF;
+    --teal:#0FB5A0;--teal-deep:#0B8E7F;--teal-soft:#E6F8F5;
+    --green:#12A150;--green-soft:#E8F7EE;--amber:#B7791F;--amber-soft:#FEF6E7;
+    --red:#C0392B;--red-soft:#FDECEA;--ink:#17172B;--ink-2:#4A4A63;--muted:#8A8AA0;
+    --line:#EAEAF0;--bg:#F6F6F9;
+    --blue:linear-gradient(140deg,#7DA8FF,#4E76E8);
+    --shadow:0 2px 10px rgba(20,20,50,.06),0 1px 3px rgba(20,20,50,.05);
+    --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:var(--sans);background:#ECECF2;color:var(--ink);line-height:1.45}
+  .wrap{max-width:1200px;margin:0 auto;padding:30px 22px 80px}
+  h1{font-family:var(--serif);font-size:30px;margin:0 0 4px}
+  .lede{color:var(--ink-2);max-width:860px;margin:0 0 6px}
+  h2.sec{font-family:var(--serif);font-size:22px;margin:36px 0 4px}
+  .sub{color:var(--muted);font-size:13.5px;margin:0 0 18px;max-width:860px}
+  b{font-weight:700}
+
+  /* ---- priority ladder ---- */
+  .ladder{display:flex;flex-direction:column;gap:10px;max-width:820px}
+  .rung{display:flex;gap:14px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 14px;box-shadow:var(--shadow)}
+  .rung .num{width:26px;height:26px;border-radius:50%;color:#fff;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;flex:0 0 26px}
+  .rung .sw{width:14px;height:14px;border-radius:4px;flex:0 0 14px}
+  .rung .who{font-weight:700;font-size:14px}
+  .rung .what{color:var(--ink-2);font-size:12.5px}
+  .rung .tone{margin-left:auto;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);white-space:nowrap}
+
+  /* ---- phone frames ---- */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:22px;align-items:start}
+  .col{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:var(--shadow)}
+  .chead{display:flex;align-items:baseline;gap:8px;margin-bottom:2px}
+  .ctag{font-size:11px;font-weight:800;color:#fff;background:var(--purple);border-radius:6px;padding:2px 7px}
+  .cname{font-weight:800;font-size:15px}
+  .cwhen{font-size:12px;color:var(--muted);margin:2px 0 13px;line-height:1.45}
+  .screen{background:var(--bg);border-radius:14px;padding:12px}
+  .greet{font-family:var(--serif);font-size:19px;margin:2px 0 3px}
+  .gsub{font-size:12px;color:var(--muted);margin:0 0 12px}
+  .stub{height:44px;background:#fff;border:1px solid var(--line);border-radius:12px;margin-top:10px;display:flex;align-items:center;padding:0 12px;color:var(--muted);font-size:12.5px;gap:10px}
+  .stub .d{width:26px;height:26px;border-radius:8px;background:#EEF0F6;flex:0 0 26px}
+
+  /* ---- banner base ---- */
+  .banner{border-radius:16px;padding:15px 16px}
+  .bhead{display:flex;align-items:center;gap:11px}
+  .bicon{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:19px;flex:0 0 40px}
+  .btitle{font-weight:800;font-size:16px;line-height:1.2}
+  .bsub{font-size:12.5px;margin-top:2px;opacity:.92}
+  .bbtns{display:flex;gap:9px;margin-top:13px}
+  .btn{border:0;border-radius:11px;padding:11px 14px;font-weight:700;font-size:13.5px;font-family:var(--sans);cursor:pointer}
+  .btn.block{flex:1}
+
+  /* treatment T1 tinted teal */
+  .t-teal{background:linear-gradient(135deg,var(--teal),var(--teal-deep));color:#fff;box-shadow:0 10px 24px rgba(15,181,160,.35)}
+  .t-teal .bicon{background:rgba(255,255,255,.22)}
+  .t-teal .btn.p{background:#fff;color:var(--teal-deep)}
+  .t-teal .btn.o{background:rgba(255,255,255,.16);color:#fff;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.6)}
+
+  /* treatment T2 brand gradient */
+  .t-brand{background:linear-gradient(135deg,#7C3AED,#4E76E8);color:#fff;box-shadow:0 10px 24px rgba(109,40,217,.38)}
+  .t-brand .bicon{background:rgba(255,255,255,.22)}
+  .t-brand .btn.p{background:#fff;color:var(--purple)}
+  .t-brand .btn.o{background:rgba(255,255,255,.16);color:#fff;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.6)}
+
+  /* treatment T3 accent-bar white */
+  .t-accent{background:#fff;border:1px solid var(--line);border-left:5px solid var(--teal);box-shadow:var(--shadow);color:var(--ink)}
+  .t-accent .bicon{background:var(--teal-soft);color:var(--teal-deep)}
+  .t-accent .btn.p{background:var(--teal);color:#fff}
+  .t-accent .btn.o{background:#fff;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--line)}
+
+  /* treatment T4 full-bleed band (wrapper) */
+  .band{margin:-12px -12px 12px;border-radius:14px 14px 0 0;padding:15px 16px;color:#fff;background:linear-gradient(135deg,var(--teal),var(--teal-deep))}
+  .band .bicon{background:rgba(255,255,255,.22)}
+  .band .btn.p{background:#fff;color:var(--teal-deep)}
+  .band .btn.o{background:rgba(255,255,255,.16);color:#fff;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.6)}
+
+  /* state colors */
+  .s-red{background:linear-gradient(135deg,#E0574A,#C0392B);color:#fff;box-shadow:0 10px 24px rgba(192,57,43,.34)}
+  .s-red .bicon{background:rgba(255,255,255,.22)} .s-red .btn.p{background:#fff;color:var(--red)} .s-red .btn.o{background:rgba(255,255,255,.16);color:#fff;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.6)}
+  .s-amber{background:linear-gradient(135deg,#E8A33D,#C98A1E);color:#fff;box-shadow:0 10px 24px rgba(201,138,30,.32)}
+  .s-amber .bicon{background:rgba(255,255,255,.22)} .s-amber .btn.p{background:#fff;color:#9a6a12} .s-amber .btn.o{background:rgba(255,255,255,.16);color:#fff;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.6)}
+  .s-purple{background:linear-gradient(135deg,#7C3AED,#6D28D9);color:#fff;box-shadow:0 10px 24px rgba(109,40,217,.34)}
+  .s-purple .bicon{background:rgba(255,255,255,.22)} .s-purple .btn.p{background:#fff;color:var(--purple)} .s-purple .btn.o{background:rgba(255,255,255,.16);color:#fff;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.6)}
+
+  .rec{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px;box-shadow:var(--shadow);max-width:860px;margin-top:8px}
+  .rec b{color:var(--ink)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Bold — Priority Banner</h1>
+  <p class="lede">The top of Today should be the page's <b>hero</b>: one slot that always holds the single most important thing, and is the <b>only filled-color block above the fold</b>. That contrast — one tinted hero over all-white cards — is what makes it stand out, without alarming anyone.</p>
+
+  <!-- ============ 1 · THE SYSTEM ============ -->
+  <h2 class="sec">1 · The system — one slot, a priority order</h2>
+  <p class="sub">The banner shows exactly one thing. What fills it is decided by this hierarchy (top wins). When the top item is resolved — e.g. the daily med check is done — the banner falls through to the next. Color encodes urgency; <b>only red is alarming</b>, everything else is calm-but-elevated.</p>
+  <div class="ladder">
+    <div class="rung"><span class="num" style="background:#C0392B">1</span><span class="sw" style="background:#C0392B"></span><div><div class="who">Safety alert</div><div class="what">Severe symptom logged, hold-dose instruction, overdue critical lab.</div></div><span class="tone">Urgent · red</span></div>
+    <div class="rung"><span class="num" style="background:#0B8E7F">2</span><span class="sw" style="background:#0FB5A0"></span><div><div class="who">Daily medication check-in</div><div class="what">On medication &amp; not checked in today. A safety touchpoint — prominent but reassuring.</div></div><span class="tone">Calm · teal</span></div>
+    <div class="rung"><span class="num" style="background:#C98A1E">3</span><span class="sw" style="background:#E8A33D"></span><div><div class="who">Time-sensitive action</div><div class="what">Appointment today (join), lab due, refill review approaching.</div></div><span class="tone">Attention · amber</span></div>
+    <div class="rung"><span class="num" style="background:#6D28D9">4</span><span class="sw" style="background:#7C3AED"></span><div><div class="who">Onboarding next step</div><div class="what">Pre-visit states — the next setup task to keep momentum.</div></div><span class="tone">Guide · purple</span></div>
+    <div class="rung"><span class="num" style="background:#12A150">5</span><span class="sw" style="background:#12A150"></span><div><div class="who">Encouragement</div><div class="what">Nothing urgent — a warm highlight (a streak, a win) so the hero is never empty.</div></div><span class="tone">Positive · green</span></div>
+  </div>
+
+  <!-- ============ 2 · VISUAL TREATMENTS ============ -->
+  <h2 class="sec">2 · Making it stand out — four treatments</h2>
+  <p class="sub">Same content (the daily med check-in), four ways to lift it off the page. Each shows the greeting + hero + a couple of greyed cards below, so you can judge how much it pops in context.</p>
+  <div class="grid">
+
+    <!-- T1 tinted teal -->
+    <div class="col">
+      <div class="chead"><span class="ctag">T1</span><span class="cname">Tinted hero (teal)</span></div>
+      <div class="cwhen">Filled soft-teal block. Calm-positive, clearly the hero. Recommended for the daily med check — prominent without alarm.</div>
+      <div class="screen">
+        <div class="greet">Hi Carol!</div>
+        <div class="banner t-teal">
+          <div class="bhead"><span class="bicon">♥</span><div><div class="btitle">How are you feeling today?</div><div class="bsub">A quick daily check keeps you safe.</div></div></div>
+          <div class="bbtns"><button class="btn p block">I’m doing well</button><button class="btn o block">Log a symptom</button></div>
+        </div>
+        <div class="stub"><span class="d"></span>Today’s Checklist</div>
+        <div class="stub"><span class="d"></span>For you today</div>
+      </div>
+    </div>
+
+    <!-- T2 brand gradient -->
+    <div class="col">
+      <div class="chead"><span class="ctag">T2</span><span class="cname">Brand gradient hero</span></div>
+      <div class="cwhen">Purple→blue, on-brand and bold. Most striking. May feel strong for an everyday touchpoint — great for key moments.</div>
+      <div class="screen">
+        <div class="greet">Hi Carol!</div>
+        <div class="banner t-brand">
+          <div class="bhead"><span class="bicon">♥</span><div><div class="btitle">How are you feeling today?</div><div class="bsub">A quick daily check keeps you safe.</div></div></div>
+          <div class="bbtns"><button class="btn p block">I’m doing well</button><button class="btn o block">Log a symptom</button></div>
+        </div>
+        <div class="stub"><span class="d"></span>Today’s Checklist</div>
+        <div class="stub"><span class="d"></span>For you today</div>
+      </div>
+    </div>
+
+    <!-- T3 accent bar -->
+    <div class="col">
+      <div class="chead"><span class="ctag">T3</span><span class="cname">Accent-bar card</span></div>
+      <div class="cwhen">Stays white but gets a bold left accent bar, bigger icon, heavier heading. Lightest touch — elevates without a full color fill.</div>
+      <div class="screen">
+        <div class="greet">Hi Carol!</div>
+        <div class="banner t-accent">
+          <div class="bhead"><span class="bicon">♥</span><div><div class="btitle">How are you feeling today?</div><div class="bsub" style="color:var(--muted)">A quick daily check keeps you safe.</div></div></div>
+          <div class="bbtns"><button class="btn p block">I’m doing well</button><button class="btn o block">Log a symptom</button></div>
+        </div>
+        <div class="stub"><span class="d"></span>Today’s Checklist</div>
+        <div class="stub"><span class="d"></span>For you today</div>
+      </div>
+    </div>
+
+    <!-- T4 full-bleed band -->
+    <div class="col">
+      <div class="chead"><span class="ctag">T4</span><span class="cname">Full-bleed band</span></div>
+      <div class="cwhen">Edge-to-edge colored band anchored to the top, greeting sits inside it. Reads as a system-level “priority zone.” Boldest framing.</div>
+      <div class="screen" style="padding-top:0;overflow:hidden">
+        <div class="band">
+          <div style="font-family:var(--serif);font-size:18px;margin-bottom:10px">Hi Carol!</div>
+          <div class="bhead"><span class="bicon">♥</span><div><div class="btitle">How are you feeling today?</div><div class="bsub">A quick daily check keeps you safe.</div></div></div>
+          <div class="bbtns"><button class="btn p block">I’m doing well</button><button class="btn o block">Log a symptom</button></div>
+        </div>
+        <div class="stub"><span class="d"></span>Today’s Checklist</div>
+        <div class="stub"><span class="d"></span>For you today</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ============ 3 · ONE SLOT, MANY STATES ============ -->
+  <h2 class="sec">3 · The same slot, across priorities</h2>
+  <p class="sub">Proof the banner is a reusable system, not a one-off. Same hero position, content and color driven by the hierarchy above (shown here in the tinted treatment).</p>
+  <div class="grid">
+
+    <div class="col">
+      <div class="chead"><span class="ctag" style="background:#C0392B">1</span><span class="cname">Safety alert</span></div>
+      <div class="cwhen">Highest priority. The only time we go red. Overrides everything.</div>
+      <div class="screen"><div class="greet">Hi Carol!</div>
+        <div class="banner s-red">
+          <div class="bhead"><span class="bicon">!</span><div><div class="btitle">Let’s keep you safe</div><div class="bsub">You logged trouble keeping fluids down. Hold your next dose and talk to your team now.</div></div></div>
+          <div class="bbtns"><button class="btn p block">Message my care team</button></div>
+        </div>
+        <div class="stub"><span class="d"></span>Today’s Checklist</div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="chead"><span class="ctag" style="background:#0B8E7F">2</span><span class="cname">Daily med check-in</span></div>
+      <div class="cwhen">Default hero for medication days until checked in.</div>
+      <div class="screen"><div class="greet">Hi Carol!</div>
+        <div class="banner t-teal">
+          <div class="bhead"><span class="bicon">♥</span><div><div class="btitle">How are you feeling today?</div><div class="bsub">A quick daily check keeps you safe.</div></div></div>
+          <div class="bbtns"><button class="btn p block">I’m doing well</button><button class="btn o block">Log a symptom</button></div>
+        </div>
+        <div class="stub"><span class="d"></span>Today’s Checklist</div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="chead"><span class="ctag" style="background:#C98A1E">3</span><span class="cname">Time-sensitive</span></div>
+      <div class="cwhen">Shows when a dated action is near (once med check is done).</div>
+      <div class="screen"><div class="greet">Hi Carol!</div>
+        <div class="banner s-amber">
+          <div class="bhead"><span class="bicon">⏱</span><div><div class="btitle">Refill review in 6 days</div><div class="bsub">Medications aren’t auto-renewed — book your telehealth visit.</div></div></div>
+          <div class="bbtns"><button class="btn p block">See what to prepare</button><button class="btn o block">Book</button></div>
+        </div>
+        <div class="stub"><span class="d"></span>Today’s Checklist</div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="chead"><span class="ctag" style="background:#6D28D9">4</span><span class="cname">Onboarding step</span></div>
+      <div class="cwhen">Pre-visit states — the next setup task.</div>
+      <div class="screen"><div class="greet">Hi Carol!</div>
+        <div class="banner s-purple">
+          <div class="bhead"><span class="bicon">📏</span><div><div class="btitle">Next: add your measurements</div><div class="bsub">Two minutes — it helps your provider plan your care.</div></div></div>
+          <div class="bbtns"><button class="btn p block">Start</button><button class="btn o block">How do I measure?</button></div>
+        </div>
+        <div class="stub"><span class="d"></span>Your checklist</div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="chead"><span class="ctag" style="background:#12A150">5</span><span class="cname">Encouragement</span></div>
+      <div class="cwhen">Nothing urgent — the hero is never empty or dull.</div>
+      <div class="screen"><div class="greet">Hi Carol!</div>
+        <div class="banner" style="background:var(--green-soft);border:1px solid #BDE9CD;color:var(--ink)">
+          <div class="bhead"><span class="bicon" style="background:#fff;color:var(--green)">▲</span><div><div class="btitle">Your strength is climbing</div><div class="bsub" style="color:var(--ink-2)">Sit-to-stand: 10 → 14 reps. That’s real independence you’re building.</div></div></div>
+          <div class="bbtns"><button class="btn p block" style="background:var(--green);color:#fff">See my progress</button></div>
+        </div>
+        <div class="stub"><span class="d"></span>Today’s Checklist</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="rec">
+    <b>Recommendation.</b> Use <b>T1 (tinted teal)</b> as the everyday treatment for the med check-in — it clearly becomes the hero because it's the one filled block, but teal reads calm and positive, not alarming. Reserve the same <b>filled-banner treatment</b> for whatever wins the priority slot, swapping color by urgency (red → teal → amber → purple → green). Keep <b>red exclusively</b> for true safety. Everything below the banner stays white, so the hero always has contrast to stand against. If you want the boldest “this is your command center” feel, <b>T4 (full-bleed band)</b> is the upgrade path.
+  </div>
+</div>
+</body>
+</html>

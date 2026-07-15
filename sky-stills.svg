@@ -1,0 +1,117 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 770 574"><rect width="770" height="574" fill="#ECECF2"/><g transform="translate(30,48)">
+    <g>
+      <text x="0" y="-9" font-family="Georgia, serif" font-size="14" font-weight="700" fill="#4A4A63">Dawn · 6am</text>
+      <clipPath id="cl0"><rect x="0" y="0" width="340" height="238" rx="18"/></clipPath>
+      <rect x="0" y="0" width="340" height="238" rx="18" fill="#FBF3EC" stroke="#E3E3EC"/>
+      <g clip-path="url(#cl0)">
+        <filter id="bg0" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="16"/></filter>
+        <filter id="bo0" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="4"/></filter>
+        <ellipse cx="65" cy="47" rx="130" ry="130" fill="rgb(255,150,120)" filter="url(#bg0)" opacity="0.9"/>
+        <g filter="url(#bo0)"><g transform="translate(40,22) scale(0.5)"><defs>
+      <radialGradient id="su0" cx="40%" cy="34%" r="70%"><stop offset="0%" stop-color="#FFF6D0"/><stop offset="52%" stop-color="#FFD24D"/><stop offset="100%" stop-color="#FBB114"/></radialGradient></defs>
+      <circle cx="50" cy="50" r="42" fill="#FFDE7A" opacity="0.35"/>
+      <circle cx="50" cy="50" r="30" fill="url(#su0)"/>
+      <ellipse cx="41" cy="40" rx="12" ry="9" fill="#fff" opacity="0.5"/></g></g>
+        <rect x="0" y="0" width="340" height="238" fill="#ffffff" opacity="0.44"/>
+      </g>
+      <text x="20" y="46" font-family="Georgia, serif" font-size="26" font-weight="700" fill="#17172B">Hi Carol!</text>
+      <text x="20" y="70" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#4A4A63">To-dos below are based on your action plan.</text>
+      <rect x="16" y="90" width="308" height="134" rx="14" fill="#fff" stroke="#EAEAF0"/>
+      <rect x="30" y="104" width="30" height="30" rx="9" fill="#5B86E8"/>
+      <text x="34" y="124" font-family="Helvetica" font-size="15" fill="#fff">℞</text>
+      <text x="70" y="112" font-family="Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#17172B">How are you feeling on the medication?</text>
+      <text x="70" y="130" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#4A4A63">A quick daily check keeps you safe.</text>
+      <rect x="30" y="146" width="128" height="34" rx="17" fill="#fff" stroke="#EAEAF0"/>
+      <g transform="translate(42,155)"><g transform="translate(0,0)"><circle cx="8" cy="8" r="8" fill="#3DAE76"/><circle cx="6" cy="7" r="1.4" fill="#12603D"/><circle cx="10" cy="7" r="1.4" fill="#12603D"/><path d="M5 9.5 Q8 12 11 9.5" fill="none" stroke="#12603D" stroke-width="1.5" stroke-linecap="round"/></g></g>
+      <text x="64" y="167" font-family="Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#4A4A63">I’m doing well</text>
+      <rect x="168" y="146" width="140" height="34" rx="17" fill="#fff" stroke="#EAEAF0"/>
+      <g transform="translate(180,155)"><g><rect x="6.5" y="1.5" width="3.5" height="13" rx="1.7" fill="#5D6FE8"/><rect x="1.5" y="6.5" width="13" height="3.5" rx="1.7" fill="#5D6FE8"/></g></g>
+      <text x="202" y="167" font-family="Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#4A4A63">Log side effects</text>
+    </g></g><g transform="translate(400,48)">
+    <g>
+      <text x="0" y="-9" font-family="Georgia, serif" font-size="14" font-weight="700" fill="#4A4A63">Midday · 12pm</text>
+      <clipPath id="cl1"><rect x="0" y="0" width="340" height="238" rx="18"/></clipPath>
+      <rect x="0" y="0" width="340" height="238" rx="18" fill="#FCF8EE" stroke="#E3E3EC"/>
+      <g clip-path="url(#cl1)">
+        <filter id="bg1" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="16"/></filter>
+        <filter id="bo1" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="4"/></filter>
+        <ellipse cx="175" cy="35" rx="130" ry="130" fill="rgb(255,236,168)" filter="url(#bg1)" opacity="0.9"/>
+        <g filter="url(#bo1)"><g transform="translate(150,10) scale(0.5)"><defs>
+      <radialGradient id="su1" cx="40%" cy="34%" r="70%"><stop offset="0%" stop-color="#FFF6D0"/><stop offset="52%" stop-color="#FFD24D"/><stop offset="100%" stop-color="#FBB114"/></radialGradient></defs>
+      <circle cx="50" cy="50" r="42" fill="#FFDE7A" opacity="0.35"/>
+      <circle cx="50" cy="50" r="30" fill="url(#su1)"/>
+      <ellipse cx="41" cy="40" rx="12" ry="9" fill="#fff" opacity="0.5"/></g></g>
+        <rect x="0" y="0" width="340" height="238" fill="#ffffff" opacity="0.44"/>
+      </g>
+      <text x="20" y="46" font-family="Georgia, serif" font-size="26" font-weight="700" fill="#17172B">Hi Carol!</text>
+      <text x="20" y="70" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#4A4A63">To-dos below are based on your action plan.</text>
+      <rect x="16" y="90" width="308" height="134" rx="14" fill="#fff" stroke="#EAEAF0"/>
+      <rect x="30" y="104" width="30" height="30" rx="9" fill="#5B86E8"/>
+      <text x="34" y="124" font-family="Helvetica" font-size="15" fill="#fff">℞</text>
+      <text x="70" y="112" font-family="Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#17172B">How are you feeling on the medication?</text>
+      <text x="70" y="130" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#4A4A63">A quick daily check keeps you safe.</text>
+      <rect x="30" y="146" width="128" height="34" rx="17" fill="#fff" stroke="#EAEAF0"/>
+      <g transform="translate(42,155)"><g transform="translate(0,0)"><circle cx="8" cy="8" r="8" fill="#3DAE76"/><circle cx="6" cy="7" r="1.4" fill="#12603D"/><circle cx="10" cy="7" r="1.4" fill="#12603D"/><path d="M5 9.5 Q8 12 11 9.5" fill="none" stroke="#12603D" stroke-width="1.5" stroke-linecap="round"/></g></g>
+      <text x="64" y="167" font-family="Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#4A4A63">I’m doing well</text>
+      <rect x="168" y="146" width="140" height="34" rx="17" fill="#fff" stroke="#EAEAF0"/>
+      <g transform="translate(180,155)"><g><rect x="6.5" y="1.5" width="3.5" height="13" rx="1.7" fill="#5D6FE8"/><rect x="1.5" y="6.5" width="13" height="3.5" rx="1.7" fill="#5D6FE8"/></g></g>
+      <text x="202" y="167" font-family="Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#4A4A63">Log side effects</text>
+    </g></g><g transform="translate(30,330)">
+    <g>
+      <text x="0" y="-9" font-family="Georgia, serif" font-size="14" font-weight="700" fill="#4A4A63">Sunset · 6:30pm</text>
+      <clipPath id="cl2"><rect x="0" y="0" width="340" height="238" rx="18"/></clipPath>
+      <rect x="0" y="0" width="340" height="238" rx="18" fill="#FAF2EE" stroke="#E3E3EC"/>
+      <g clip-path="url(#cl2)">
+        <filter id="bg2" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="16"/></filter>
+        <filter id="bo2" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="4"/></filter>
+        <ellipse cx="275" cy="47" rx="130" ry="130" fill="rgb(255,150,105)" filter="url(#bg2)" opacity="0.9"/>
+        <g filter="url(#bo2)"><g transform="translate(250,22) scale(0.5)"><defs>
+      <radialGradient id="su2" cx="40%" cy="34%" r="70%"><stop offset="0%" stop-color="#FFF6D0"/><stop offset="52%" stop-color="#FFD24D"/><stop offset="100%" stop-color="#FBB114"/></radialGradient></defs>
+      <circle cx="50" cy="50" r="42" fill="#FFDE7A" opacity="0.35"/>
+      <circle cx="50" cy="50" r="30" fill="url(#su2)"/>
+      <ellipse cx="41" cy="40" rx="12" ry="9" fill="#fff" opacity="0.5"/></g></g>
+        <rect x="0" y="0" width="340" height="238" fill="#ffffff" opacity="0.44"/>
+      </g>
+      <text x="20" y="46" font-family="Georgia, serif" font-size="26" font-weight="700" fill="#17172B">Hi Carol!</text>
+      <text x="20" y="70" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#4A4A63">To-dos below are based on your action plan.</text>
+      <rect x="16" y="90" width="308" height="134" rx="14" fill="#fff" stroke="#EAEAF0"/>
+      <rect x="30" y="104" width="30" height="30" rx="9" fill="#5B86E8"/>
+      <text x="34" y="124" font-family="Helvetica" font-size="15" fill="#fff">℞</text>
+      <text x="70" y="112" font-family="Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#17172B">How are you feeling on the medication?</text>
+      <text x="70" y="130" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#4A4A63">A quick daily check keeps you safe.</text>
+      <rect x="30" y="146" width="128" height="34" rx="17" fill="#fff" stroke="#EAEAF0"/>
+      <g transform="translate(42,155)"><g transform="translate(0,0)"><circle cx="8" cy="8" r="8" fill="#3DAE76"/><circle cx="6" cy="7" r="1.4" fill="#12603D"/><circle cx="10" cy="7" r="1.4" fill="#12603D"/><path d="M5 9.5 Q8 12 11 9.5" fill="none" stroke="#12603D" stroke-width="1.5" stroke-linecap="round"/></g></g>
+      <text x="64" y="167" font-family="Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#4A4A63">I’m doing well</text>
+      <rect x="168" y="146" width="140" height="34" rx="17" fill="#fff" stroke="#EAEAF0"/>
+      <g transform="translate(180,155)"><g><rect x="6.5" y="1.5" width="3.5" height="13" rx="1.7" fill="#5D6FE8"/><rect x="1.5" y="6.5" width="13" height="3.5" rx="1.7" fill="#5D6FE8"/></g></g>
+      <text x="202" y="167" font-family="Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#4A4A63">Log side effects</text>
+    </g></g><g transform="translate(400,330)">
+    <g>
+      <text x="0" y="-9" font-family="Georgia, serif" font-size="14" font-weight="700" fill="#4A4A63">Night · 10pm</text>
+      <clipPath id="cl3"><rect x="0" y="0" width="340" height="238" rx="18"/></clipPath>
+      <rect x="0" y="0" width="340" height="238" rx="18" fill="#F1F0FA" stroke="#E3E3EC"/>
+      <g clip-path="url(#cl3)">
+        <filter id="bg3" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="16"/></filter>
+        <filter id="bo3" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="4"/></filter>
+        <ellipse cx="277" cy="43" rx="130" ry="130" fill="rgb(120,120,185)" filter="url(#bg3)" opacity="0.9"/>
+        <g filter="url(#bo3)"><circle cx="40" cy="30" r="1.6" fill="#fff"/><circle cx="70" cy="20" r="1.6" fill="#fff"/><circle cx="110" cy="40" r="1.6" fill="#fff"/><circle cx="250" cy="26" r="1.6" fill="#fff"/><circle cx="300" cy="46" r="1.6" fill="#fff"/><circle cx="200" cy="24" r="1.6" fill="#fff"/><g transform="translate(252,18) scale(0.5)"><defs>
+      <radialGradient id="mo3" cx="38%" cy="34%" r="72%"><stop offset="0%" stop-color="#FDFBFF"/><stop offset="100%" stop-color="#CDD1F2"/></radialGradient>
+      <mask id="mc3"><rect width="100" height="100" fill="black"/><circle cx="50" cy="50" r="30" fill="white"/><circle cx="64" cy="40" r="25" fill="black"/></mask></defs>
+      <circle cx="50" cy="50" r="40" fill="#C9CCF4" opacity="0.25"/>
+      <circle cx="50" cy="50" r="30" fill="url(#mo3)" mask="url(#mc3)"/></g></g>
+        <rect x="0" y="0" width="340" height="238" fill="#ffffff" opacity="0.44"/>
+      </g>
+      <text x="20" y="46" font-family="Georgia, serif" font-size="26" font-weight="700" fill="#17172B">Hi Carol!</text>
+      <text x="20" y="70" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#4A4A63">To-dos below are based on your action plan.</text>
+      <rect x="16" y="90" width="308" height="134" rx="14" fill="#fff" stroke="#EAEAF0"/>
+      <rect x="30" y="104" width="30" height="30" rx="9" fill="#5B86E8"/>
+      <text x="34" y="124" font-family="Helvetica" font-size="15" fill="#fff">℞</text>
+      <text x="70" y="112" font-family="Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#17172B">How are you feeling on the medication?</text>
+      <text x="70" y="130" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#4A4A63">A quick daily check keeps you safe.</text>
+      <rect x="30" y="146" width="128" height="34" rx="17" fill="#fff" stroke="#EAEAF0"/>
+      <g transform="translate(42,155)"><g transform="translate(0,0)"><circle cx="8" cy="8" r="8" fill="#3DAE76"/><circle cx="6" cy="7" r="1.4" fill="#12603D"/><circle cx="10" cy="7" r="1.4" fill="#12603D"/><path d="M5 9.5 Q8 12 11 9.5" fill="none" stroke="#12603D" stroke-width="1.5" stroke-linecap="round"/></g></g>
+      <text x="64" y="167" font-family="Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#4A4A63">I’m doing well</text>
+      <rect x="168" y="146" width="140" height="34" rx="17" fill="#fff" stroke="#EAEAF0"/>
+      <g transform="translate(180,155)"><g><rect x="6.5" y="1.5" width="3.5" height="13" rx="1.7" fill="#5D6FE8"/><rect x="1.5" y="6.5" width="13" height="3.5" rx="1.7" fill="#5D6FE8"/></g></g>
+      <text x="202" y="167" font-family="Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#4A4A63">Log side effects</text>
+    </g></g></svg>

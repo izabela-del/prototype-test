@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bold — To-Do Card Spec</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --purple:#6D28D9; --purple-2:#7C3AED; --purple-soft:#F3EEFF;
+    --teal:#0FB5A0; --teal-2:#0EA394;
+    --green:#12A150; --green-soft:#E8F7EE;
+    --ink:#17172B; --ink-2:#4A4A63; --muted:#8A8AA0;
+    --line:#EAEAF0; --bg:#F6F6F9; --card:#FFFFFF;
+    --amber:#B7791F; --amber-soft:#FEF6E7; --red:#C0392B; --red-soft:#FDECEA;
+    --grad:linear-gradient(135deg,#3B82F6,#7C3AED);
+    --shadow:0 2px 10px rgba(20,20,50,.06),0 1px 3px rgba(20,20,50,.05);
+    --serif:"Source Serif 4","Iowan Old Style",Georgia,"Times New Roman",serif;
+    --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  }
+  *{box-sizing:border-box;-webkit-font-smoothing:antialiased}
+  body{margin:0;font-family:var(--sans);color:var(--ink);background:#ECECF2;line-height:1.5}
+  .page{max-width:1120px;margin:0 auto;padding:34px 22px 100px}
+
+  /* ---------- doc chrome ---------- */
+  .doc-head{margin-bottom:26px}
+  .eyebrow{font-size:12px;font-weight:800;letter-spacing:.7px;text-transform:uppercase;color:var(--purple)}
+  .doc-head h1{font-family:var(--serif);font-size:34px;margin:6px 0 8px}
+  .doc-head p{color:var(--ink-2);margin:0;max-width:760px;font-size:15px}
+  .meta-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+  .tagchip{font-size:12px;font-weight:600;color:var(--ink-2);background:#fff;border:1px solid var(--line);border-radius:20px;padding:5px 11px}
+  .tagchip b{color:var(--purple)}
+
+  .sec{background:#fff;border:1px solid var(--line);border-radius:18px;padding:24px 26px;margin-top:20px;box-shadow:var(--shadow)}
+  .sec > h2{font-family:var(--serif);font-size:21px;margin:0 0 4px}
+  .sec > .lede{color:var(--ink-2);font-size:14px;margin:0 0 18px;max-width:720px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media(max-width:820px){.grid2{grid-template-columns:1fr}}
+
+  /* example canvas — content column at real app width */
+  .canvas{background:var(--bg);border:1px solid var(--line);border-radius:16px;padding:18px 16px}
+  .canvas.narrow{max-width:390px}
+  .spec-note{font-size:13.5px;color:var(--ink-2)}
+  .spec-note h4{font-family:var(--sans);font-size:14px;margin:0 0 6px;color:var(--ink)}
+  .spec-note ul{margin:0 0 12px;padding-left:18px}
+  .spec-note li{margin:3px 0}
+  .kbd{font-family:var(--mono);font-size:12px;background:#F4EFFF;color:#5B21B6;border-radius:5px;padding:1px 6px}
+
+  .variant{display:grid;grid-template-columns:390px 1fr;gap:22px;align-items:start;padding:18px 0;border-top:1px dashed var(--line)}
+  .variant:first-of-type{border-top:0}
+  @media(max-width:820px){.variant{grid-template-columns:1fr}}
+  .variant .canvas{align-self:start}
+  .vtitle{display:flex;align-items:baseline;gap:10px;margin:0 0 8px}
+  .vtitle h3{font-size:16px;margin:0}
+  .vtitle code{font-family:var(--mono);font-size:12px;color:var(--purple);background:var(--purple-soft);padding:2px 8px;border-radius:6px}
+
+  /* token table */
+  table{border-collapse:collapse;width:100%;font-size:13px}
+  th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);font-weight:700}
+  td code,.mono{font-family:var(--mono);font-size:12px}
+  .sw{display:inline-block;width:14px;height:14px;border-radius:4px;border:1px solid rgba(0,0,0,.12);vertical-align:-2px;margin-right:7px}
+
+  pre{background:#1c1b29;color:#e6e4f0;border-radius:12px;padding:16px 18px;overflow:auto;font-family:var(--mono);font-size:12.5px;line-height:1.6;margin:0}
+  pre .c{color:#8b88a8}
+  pre .k{color:#c9a8ff}
+  pre .s{color:#8fd6a0}
+
+  .callout{background:var(--purple-soft);border:1px solid #E1D5FB;border-radius:12px;padding:13px 15px;font-size:13.5px;color:#3f2a70;margin:14px 0 0}
+  .callout b{color:#5B21B6}
+
+  /* ---------- CARD STYLES (verbatim from Bold-Wireframes.html) ---------- */
+  .sec-h{font-family:var(--serif);font-size:18px;margin:0 2px 10px;display:flex;align-items:baseline;gap:8px}
+  .sec-h small{font-family:var(--sans);font-size:12.5px;color:var(--muted);font-weight:600}
+  .chkcount{font-family:var(--sans);font-size:12.5px;color:var(--muted);font-weight:600}
+  .chkintro{font-size:13px;color:var(--muted);margin:-2px 2px 12px;line-height:1.5}
+  .howto{margin:12px 2px 2px}
+  .howto>summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:var(--purple)}
+  .howto>summary::-webkit-details-marker{display:none}
+  .howto>summary::before{content:'›';display:inline-block;transition:transform .18s ease;font-size:14px}
+  .howto[open]>summary::before{transform:rotate(90deg)}
+  .howto .honor{margin-top:8px}
+  .honor{font-size:12px;color:var(--muted);margin:9px 2px 2px;line-height:1.5}
+  .honor b{color:var(--ink-2)}
+
+  .ci-card{background:#fff;border:1px solid #E5E5E5;border-radius:16px;box-shadow:0 12px 16px -4px rgba(16,24,40,.08),0 4px 6px -2px rgba(16,24,40,.03);padding:16px;margin-bottom:12px;display:flex;flex-direction:column;gap:13px}
+  .ci-head{display:flex;gap:12px;align-items:center}
+  .ci-icon{width:40px;height:40px;border-radius:50%;background:#4361EE;flex:0 0 40px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;box-shadow:0 3px 8px rgba(67,97,238,.28)}
+  .ci-photo{background-color:#E7ECF2;background-size:cover;background-position:center top;font-size:0;box-shadow:0 3px 8px rgba(16,24,40,.18)}
+  .ci-title{flex:1;min-width:0;font-family:var(--sans);font-weight:600;font-size:16px;line-height:1.3;color:#171717;margin:0}
+  .ci-desc{font-family:var(--sans);font-size:14px;line-height:1.4;color:#4D4D4D;margin:8px 0 0 52px}
+  .ci-head>.ci-done,.ci-head>.ci-cta,.ci-head>.synced,.ci-head>.tally{margin-left:auto}
+  .ci-done{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid #D4D4D4;border-radius:8px;padding:5px 9px;box-shadow:0 1px 2px rgba(16,24,40,.05);font-family:var(--sans);font-weight:600;font-size:14px;color:#171717;cursor:pointer;white-space:nowrap}
+  .ci-circle{width:15px;height:15px;border-radius:50%;border:1.6px solid #A3A3A3;display:inline-flex;align-items:center;justify-content:center;font-size:9px;color:#fff;flex:0 0 15px}
+  .ci-done.on{border-color:transparent;background:transparent;box-shadow:none;padding:0;color:var(--green)}
+  .ci-done.on .ci-circle{background:var(--green);border-color:var(--green)}
+  .ci-cta{border:1px solid var(--purple);background:var(--purple-soft);color:var(--purple);border-radius:8px;padding:5px 11px;font-weight:600;font-size:14px;cursor:pointer;font-family:var(--sans);white-space:nowrap}
+  .ci-pills{display:flex;flex-wrap:wrap;gap:10px}
+  .ci-pill{background:#F4EFFF;border:0;border-radius:16px;padding:8px 14px;font-family:var(--sans);font-weight:600;font-size:14px;color:#171717;cursor:pointer;transition:background .15s ease,transform .12s ease}
+  .ci-pill:hover{background:#EBE1FF;transform:translateY(-1px)}
+  .synced{color:var(--purple);background:var(--purple-soft);font-size:11.5px;font-weight:700;padding:5px 10px;border-radius:20px;white-space:nowrap}
+  .tally{display:flex;align-items:center;gap:8px}
+  .tally b{font-size:12.5px;min-width:56px;text-align:center;color:var(--purple);cursor:pointer;text-decoration:underline;text-decoration-style:dotted;text-decoration-color:#C9BCEF;text-underline-offset:3px}
+  .tstep{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--line);background:#fff;font-size:15px;cursor:pointer;color:var(--purple);line-height:1;padding:0;transition:border-color .15s,color .15s,background .15s}
+  /* hover + motion */
+  .ci-card{transition:border-color .15s ease,box-shadow .15s ease}
+  .ci-card:hover{border-color:#D8D8E4;box-shadow:0 14px 20px -6px rgba(16,24,40,.12),0 4px 8px -2px rgba(16,24,40,.05)}
+  .ci-done{transition:border-color .15s ease,color .15s ease,background .15s ease}
+  .ci-done:hover{background:#FAFAFA;border-color:#A3A3A3}
+  .ci-cta{transition:background .15s ease}
+  .ci-cta:hover{background:#EBE1FF}
+  .tstep:hover{border-color:var(--purple);color:var(--purple);background:var(--purple-soft)}
+  .ci-circle{position:relative}
+  @keyframes ciPop{0%{transform:scale(.5)}55%{transform:scale(1.22)}100%{transform:scale(1)}}
+  @keyframes ciRing{0%{transform:scale(.5);opacity:.55}100%{transform:scale(2.6);opacity:0}}
+  @keyframes ciFlash{0%{background:#fff}22%{background:var(--green-soft)}100%{background:#fff}}
+  @keyframes ciLift{0%{transform:scale(1)}30%{transform:scale(1.015)}100%{transform:scale(1)}}
+  .ci-card.just-done{animation:ciFlash .9s ease,ciLift .42s ease}
+  .ci-card.just-done .ci-circle{animation:ciPop .34s cubic-bezier(.34,1.56,.64,1)}
+  .ci-card.just-done .ci-circle::after{content:"";position:absolute;inset:-4px;border-radius:50%;border:2px solid var(--green);animation:ciRing .55s ease-out;pointer-events:none}
+  .ci-label{display:inline-block;overflow:hidden;white-space:nowrap;max-width:60px;opacity:1;transition:max-width .35s ease,opacity .22s ease}
+  .ci-done{gap:6px;transition:border-color .15s ease,color .15s ease,background .15s ease,box-shadow .2s ease,padding .3s ease,gap .35s ease}
+  .ci-done.on{gap:0}
+  .ci-done.on .ci-label{max-width:0;opacity:0}
+  .sparkle{position:absolute;left:50%;top:50%;font-size:9px;line-height:1;color:#12A150;pointer-events:none;transform:translate(-50%,-50%) scale(0);animation:sparkle .62s ease-out forwards}
+  @keyframes sparkle{0%{transform:translate(-50%,-50%) scale(0);opacity:1}60%{opacity:1}100%{transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(1.1);opacity:0}}
+  /* tally card → tappable, opens log drawer */
+  .ci-tap{cursor:pointer}
+  .ci-log{color:var(--purple);background:var(--purple-soft);font-size:13px;font-weight:700;padding:6px 11px;border-radius:20px;white-space:nowrap;transition:background .15s ease}
+  .ci-head>.ci-log,.ci-head>.ci-dur{margin-left:auto}
+  .ci-dur{display:inline-flex;align-items:center;gap:6px;background:var(--purple-soft);color:var(--purple);border:0;border-radius:20px;padding:6px 12px;font-size:13px;font-weight:700;font-family:var(--sans);cursor:pointer;white-space:nowrap;transition:background .15s ease}
+  .ci-dur:hover{background:#EBE1FF}
+  .ci-dur .pl{font-size:9px}
+  .ci-tap:hover .ci-log{background:#EBE1FF}
+  /* bottom-sheet drawer */
+  .sheet-scrim{position:fixed;inset:0;background:rgba(23,23,43,.35);opacity:0;pointer-events:none;transition:opacity .2s ease;z-index:40}
+  .sheet-scrim.open{opacity:1;pointer-events:auto}
+  .sheet{position:fixed;left:50%;bottom:0;transform:translate(-50%,110%);width:min(420px,94vw);background:#fff;border-radius:20px 20px 0 0;padding:10px 20px 24px;box-shadow:0 -10px 40px rgba(20,20,50,.25);z-index:41;transition:transform .3s cubic-bezier(.4,1.15,.5,1)}
+  .sheet.open{transform:translate(-50%,0)}
+  .sheet-grip{width:40px;height:4px;border-radius:2px;background:#DADAE4;margin:2px auto 8px}
+  .sheet h3{font-family:var(--serif);font-size:19px;margin:4px 0 2px;text-align:center}
+  .sheet .ctx{font-size:13px;color:var(--ink-2);text-align:center;margin:0 0 4px}
+  .logbig{display:flex;align-items:center;justify-content:center;gap:24px;margin:20px 0 8px}
+  .logstep{width:46px;height:46px;border-radius:50%;border:1.5px solid var(--line);background:#fff;font-size:24px;color:var(--purple);cursor:pointer;line-height:1;padding:0;transition:border-color .15s,background .15s}
+  .logstep:hover{border-color:var(--purple);background:var(--purple-soft)}
+  .logval{text-align:center;min-width:96px}
+  .logval b{display:block;font-family:var(--serif);font-size:36px;color:var(--ink);line-height:1}
+  .logval span{font-size:12px;color:var(--muted)}
+  .logquick{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+  .logchip{display:flex;align-items:center;gap:7px;border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:11px 12px;font-size:13px;font-weight:600;color:var(--ink);cursor:pointer;font-family:var(--sans);transition:border-color .15s,transform .12s}
+  .logchip b{margin-left:auto;color:var(--purple)}
+  .logchip:hover{border-color:var(--purple);transform:translateY(-1px)}
+  .btn.p.block{display:block;width:100%;border:0;border-radius:11px;padding:12px;font-weight:700;font-size:14px;font-family:var(--sans);cursor:pointer;background:var(--purple);color:#fff;margin-top:14px}
+  .logdone{width:100%;border:1.5px solid var(--green);background:#fff;color:var(--green);border-radius:11px;padding:12px;font-weight:700;font-size:14px;cursor:pointer;font-family:var(--sans);margin-top:8px}
+  .logdone:hover{background:var(--green-soft)}
+
+  /* annotated anatomy */
+  .anno{position:relative}
+  .anno .pin{position:absolute;background:var(--ink);color:#fff;font-size:10.5px;font-weight:700;border-radius:6px;padding:3px 7px;white-space:nowrap;z-index:2}
+  .anno .pin::before{content:"";position:absolute;width:8px;height:8px;background:var(--ink);transform:rotate(45deg)}
+
+  /* med flow demo */
+  .toast{margin-top:10px;background:var(--green-soft);border:1px solid #BDE9CD;border-radius:12px;padding:12px 14px;font-size:13px;display:none}
+  .toast.show{display:block}
+  .symrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+  .symchip{border:1.5px solid var(--line);background:#fff;border-radius:11px;padding:8px 11px;font-size:12.5px;font-weight:600;color:var(--ink);cursor:pointer;font-family:var(--sans)}
+  .symchip.warn{border-color:#F3C6C0;color:var(--red)}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="doc-head">
+    <div class="eyebrow">Component spec</div>
+    <h1>To-Do Card</h1>
+    <p>The atomic unit of the <b>Today → “To do”</b> list. One card = one action for today. Every variant shares a single layout — <b>icon left, heading + optional subcopy, trailing control</b> — and swaps only the trailing control and its behavior.</p>
+    <div class="meta-row">
+      <span class="tagchip">Source: <b>Bold-Wireframes.html</b> · <span class="mono">planItem()</span></span>
+      <span class="tagchip">Figma: <b>Member Dashboard</b> · node 969-13205</span>
+      <span class="tagchip">Selector: <b>.ci-card</b></span>
+    </div>
+  </div>
+
+  <!-- WHERE IT LIVES -->
+  <div class="sec">
+    <h2>1 · Where it lives</h2>
+    <p class="lede">The “To do” list is <b>pulled from the member’s care plan, authored by their provider</b>, and updates after each visit. Here is the full section as it renders in Today.</p>
+    <div class="grid2">
+      <div class="canvas narrow" id="liveSection"></div>
+      <div class="spec-note">
+        <h4>Section chrome</h4>
+        <ul>
+          <li><b>Header</b> — “To do” (serif 18px) + live count <span class="kbd">(2/4 done)</span>.</li>
+          <li><b>Intro sub-copy</b> — states the source: provider-written, updates after each visit.</li>
+          <li><b>Footer note</b> — separates the two behavioral families.</li>
+        </ul>
+        <h4>Two families</h4>
+        <ul>
+          <li><b>To-do tasks</b> (labs, measurements) — system-verifiable; check off when actually done.</li>
+          <li><b>Daily habits</b> (water, protein, movement) — honor-system; mark what you like or tell Bold in natural language.</li>
+        </ul>
+        <div class="callout"><b>Source model.</b> Care-plan items are provider-specific. <b>Recommended</b> items (e.g. the fitness portion) are program-level and can deep-link to the <b>Bold weight-management program</b> rather than a provider directive.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ANATOMY -->
+  <div class="sec">
+    <h2>2 · Anatomy</h2>
+    <p class="lede">Head row is a 3-part flex: fixed icon · growing text column · pinned trailing control. Pills sit full-width below.</p>
+    <div class="grid2">
+      <div class="canvas narrow anno" id="anatomy" style="padding-top:34px;padding-bottom:30px"></div>
+      <div class="spec-note">
+        <h4>Parts</h4>
+        <ul>
+          <li><b>Icon</b> — always present. 40×40 circle, blue fill + white glyph — or a <b>photo</b> (fitness class → trainer headshot) via <span class="kbd">img</span>.</li>
+          <li><b>Heading</b> — required. Verb-first, one line preferred.</li>
+          <li><b>Subcopy</b> — <b>optional</b>. The “why” or provenance. Omit for compact, heading-only cards.</li>
+          <li><b>Trailing control</b> — right-pinned; varies by variant.</li>
+          <li><b>Quick actions</b> — optional; the card’s <b>AI entry points</b> (“Ask about this move”, “Easy protein ideas”) and program links. Tapping one opens Bold with that context.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- VARIANTS -->
+  <div class="sec">
+    <h2>3 · Variants</h2>
+    <p class="lede">Same layout throughout — only the trailing control and tap behavior change. Try the interactive controls.</p>
+    <div id="variants"></div>
+  </div>
+
+  <!-- CONTENT VARIANTS -->
+  <div class="sec">
+    <h2>4 · Content variants</h2>
+    <p class="lede">Orthogonal to the behavioral variants above: subcopy, pills, and state each toggle independently.</p>
+    <div class="grid2">
+      <div class="canvas narrow" id="contentVars"></div>
+      <div class="spec-note">
+        <h4>Toggles</h4>
+        <ul>
+          <li><b>Subcopy</b> — present (why / provenance) vs. omitted (compact).</li>
+          <li><b>Pills</b> — none · 1–2 AI actions · program link.</li>
+          <li><b>State</b> — default · in-progress (tally) · done (green check).</li>
+        </ul>
+        <h4>Compact rule</h4>
+        <p>Drop subcopy when it only restates the heading (“Eat protein” + “across your meals”). Keep it when it carries the <i>why</i> or where it came from.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- INTERACTION -->
+  <div class="sec">
+    <h2>5 · Interaction &amp; motion</h2>
+    <p class="lede">How completion feels, and the two ways to log a countable habit. Tap the Done buttons and steppers below.</p>
+    <div class="grid2">
+      <div class="canvas narrow" id="motionDemo"></div>
+      <div class="spec-note">
+        <h4>“Done” animation</h4>
+        <ul>
+          <li>Check circle <b>pops</b> in with a spring — scale 0.5 → 1.22 → 1 (340ms).</li>
+          <li>A <b>sparkle burst</b> — 7 stars radiate out and fade (620ms).</li>
+          <li>The <b>“Done” label collapses away</b>, leaving just the green check chip (350ms).</li>
+          <li>A green <b>ring ripples</b> out + the card gives a soft <b>green flash + 1.5% scale-up</b>.</li>
+        </ul>
+        <h4>Hover states</h4>
+        <ul>
+          <li>Card lifts (deeper shadow); Done button darkens its border; steppers &amp; pills tint purple and nudge up 1px.</li>
+        </ul>
+        <h4>Logging is two steps (countable habits)</h4>
+        <ul>
+          <li><b>Tap the card</b> (or its progress chip) → a bottom drawer slides up.</li>
+          <li>In the drawer, either <b>dial a specific amount</b> — a big <span class="kbd">– / +</span> stepper plus food quick-adds (Eggs +20g, Chicken +25g…) — or hit <b>Mark as done</b> to complete it outright.</li>
+          <li>Reaching the target celebrates with the same check + sparkle as any other card.</li>
+        </ul>
+        <div class="callout"><b>Try it.</b> Tap the protein or water cards on the left to open the drawer.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOKENS -->
+  <div class="sec">
+    <h2>6 · Design tokens</h2>
+    <div class="grid2">
+      <div>
+        <table>
+          <tr><th>Element</th><th>Value</th></tr>
+          <tr><td>Card bg / border / radius</td><td><code>#FFF</code> · <code>1px #E5E5E5</code> · <code>16px</code></td></tr>
+          <tr><td>Card shadow</td><td><code>0 12px 16px -4px rgba(16,24,40,.08)</code></td></tr>
+          <tr><td>Card padding / gap</td><td><code>16px</code> · <code>13px</code></td></tr>
+          <tr><td>Head row gap</td><td><code>12px</code>, top-aligned</td></tr>
+          <tr><td><span class="sw" style="background:#4361EE"></span>Icon</td><td>40×40, circle, <code>#4361EE</code>, glyph 18px</td></tr>
+          <tr><td>Heading</td><td><code>16px / 600</code> <span class="sw" style="background:#171717"></span><code>#171717</code></td></tr>
+          <tr><td>Subcopy</td><td><code>14px / 400</code> <span class="sw" style="background:#4D4D4D"></span><code>#4D4D4D</code></td></tr>
+        </table>
+      </div>
+      <div>
+        <table>
+          <tr><th>Control</th><th>Value</th></tr>
+          <tr><td>Done button</td><td>bg <code>#fff</code>, border <code>1px #D4D4D4</code>, radius <code>8px</code></td></tr>
+          <tr><td>Done circle</td><td>15px, ring <code>1.6px #A3A3A3</code></td></tr>
+          <tr><td>Done · checked</td><td><span class="sw" style="background:#12A150"></span>green border + text + fill</td></tr>
+          <tr><td>CTA button</td><td><span class="sw" style="background:#6D28D9"></span>purple border, purple-soft bg, label ends <code>›</code></td></tr>
+          <tr><td>Synced badge</td><td>purple on <code>#F3EEFF</code>, <code>11.5px/700</code>, read-only</td></tr>
+          <tr><td>Tally chip → drawer</td><td>on card: purple progress chip <code>n / target unit ›</code>; drawer: 46px stepper + quick-adds; step/unit per item (10g / 1 cup)</td></tr>
+          <tr><td>Done animation</td><td>pop <code>.34s</code> spring · ring <code>.55s</code> · flash+lift <code>.42–.9s</code></td></tr>
+          <tr><td>Pill</td><td>bg <code>#F4EFFF</code> (hover <code>#EBE1FF</code>), radius 16px</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCHEMA -->
+  <div class="sec">
+    <h2>7 · Item schema & control resolution</h2>
+    <div class="grid2">
+      <pre><span class="c">// one item object → one card</span>
+{
+  i: <span class="s">'🍗'</span>,                  <span class="c">// icon glyph (required)</span>
+  img: <span class="s">trainerPhoto</span>,         <span class="c">// optional: photo fills the icon circle (fitness class → trainer headshot)</span>
+  t: <span class="s">'Eat 100g of protein'</span>, <span class="c">// heading (required)</span>
+  src: <span class="s">'Protects your muscle'</span>, <span class="c">// subcopy (optional)</span>
+
+  type: <span class="s">'honor'</span>,   <span class="c">// 'honor' | 'device' | 'tally'</span>
+  kind: <span class="s">'task'</span>,    <span class="c">// 'task' | 'med'  (overrides type)</span>
+  done: <span class="k">false</span>,
+  dur: <span class="s">'22 min'</span>,        <span class="c">// fitness class → video-duration play pill (replaces Done)</span>
+
+  cta: <span class="s">'Start'</span>,             <span class="c">// task CTA label (keep short)</span>
+  ai:  <span class="s">'Where is my...'</span>,     <span class="c">// AI context</span>
+  aiLabel: <span class="s">'Ask Bold'</span>,       <span class="c">// single-pill label</span>
+
+  n: <span class="k">3</span>, target: <span class="k">6</span>,          <span class="c">// tally: current / goal</span>
+  step: <span class="k">10</span>, unit: <span class="s">'g'</span>,      <span class="c">// tally step + unit (water: step 1, no unit)</span>
+  n: <span class="s">'12 min today'</span>,       <span class="c">// device badge text</span>
+
+  pills: [{ c: <span class="s">'Foods high in protein'</span>, a: <span class="s">'…'</span> }]
+}</pre>
+      <div class="spec-note">
+        <h4>Trailing control — resolution order</h4>
+        <ul>
+          <li><span class="kbd">type:'device'</span> → synced badge (read-only)</li>
+          <li><span class="kbd">type:'tally'</span> → stepper</li>
+          <li><span class="kbd">kind:'task'</span> → CTA, or static ✓ when done</li>
+          <li><span class="kbd">kind:'med'</span> → Done → opens side-effect check</li>
+          <li><span class="kbd">dur</span> present → video-duration play pill (fitness class)</li>
+          <li>else → honor toggle (Done on/off)</li>
+        </ul>
+        <h4>Quick actions (AI entry points)</h4>
+        <ul>
+          <li><span class="kbd">pills:[…]</span> → renders each as a quick action; tapping opens Bold with that context (or a program link).</li>
+          <li>else if <span class="kbd">ai</span> present (non-task) → single quick action labelled <span class="kbd">aiLabel</span> (e.g. “Easy protein ideas”).</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- COPY -->
+  <div class="sec">
+    <h2>8 · Copy guidelines</h2>
+    <div class="spec-note" style="font-size:14px">
+      <ul>
+        <li><b>Heading</b> — verb-first, specific, one line. “Eat 100g of protein”, not “Protein intake”.</li>
+        <li><b>Subcopy</b> — the <i>why</i> or where it came from; never repeat the heading. ≤ ~6 words.</li>
+        <li><b>CTA label</b> — action + <span class="kbd">›</span> (“Find a location ›”).</li>
+        <li><b>Numbers come from the care plan.</b> Protein target = 1.4–1.6 g/kg of the member’s <i>target</i> weight (140 lb → ~100 g/day). Keep card numbers consistent with the Care → Nutrition directive.</li>
+        <li><b>Consistent glyphs</b> — protein 🍗 · water 💧 · movement 💪 / 🧘 · medication 💊 · labs 🩸.</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<div class="sheet-scrim" id="scrim" onclick="closeSheet()"></div>
+<div class="sheet" id="sheet"><div class="sheet-grip"></div><div id="sheetBody"></div></div>
+
+<script>
+/* ---------- renderer: mirrors planItem() in Bold-Wireframes.html ---------- */
+const trainerPhoto="data:image/png;base64,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";
+function planItem(it){
+  var top, cardCls='ci-card', cardAttr='';
+  if(it.type==='device') top='<span class="synced">⌚ '+it.n+'</span>';
+  else if(it.type==='tally'){
+    cardCls='ci-card ci-tap';
+    cardAttr=' data-n="'+it.n+'" data-target="'+it.target+'" data-step="'+(it.step||1)+'" data-unit="'+(it.unit||'')+'" onclick="openLog(this)"';
+    top='<span class="ci-log">'+it.n+' of '+it.target+(it.unit?' '+it.unit:'')+' ›</span>';
+  }
+  else if(it.kind==='task') top = it.done ? '<span class="ci-done on"><span class="ci-circle">✓</span><span class="ci-label">Done</span></span>' : '<button class="ci-cta">'+(it.cta||'Start')+' ›</button>';
+  else if(it.kind==='med') top='<button class="ci-done'+(it.done?' on':'')+'" onclick="markDoneMed(this)"><span class="ci-circle">✓</span><span class="ci-label">Done</span></button>';
+  else if(it.dur) top='<button class="ci-dur"><span class="pl">▶</span>'+it.dur+'</button>';
+  else top='<button class="ci-done'+(it.done?' on':'')+'" onclick="markDone(this)"><span class="ci-circle">✓</span><span class="ci-label">Done</span></button>';
+  var pills='';
+  if(it.pills) pills=it.pills.map(function(p){return '<button class="ci-pill" onclick="event.stopPropagation()">'+p.c+'</button>';}).join('');
+  else if(it.kind!=='task' && it.ai) pills='<button class="ci-pill" onclick="event.stopPropagation()">'+it.aiLabel+'</button>';
+  var med = it.kind==='med' ? '<div class="toast" data-med>✓ Logged for today. A quick safety check — any side effects since your dose?'+
+    '<div class="symrow"><span class="symchip">Nausea</span><span class="symchip">Dizziness</span><span class="symchip warn">Can’t keep food down</span><span class="symchip">Something else</span></div></div>' : '';
+  return '<div class="'+cardCls+'"'+cardAttr+'>'+
+    '<div class="ci-body">'+
+      '<div class="ci-head">'+(it.img?'<span class="ci-icon ci-photo" style="background-image:url(\''+it.img+'\')"></span>':'<span class="ci-icon">'+it.i+'</span>')+'<p class="ci-title">'+it.t+'</p>'+top+'</div>'+
+      (it.src?'<p class="ci-desc">'+it.src+'</p>':'')+
+    '</div>'+
+    (pills?'<div class="ci-pills">'+pills+'</div>':'')+ med +'</div>';
+}
+function sparkleBurst(circle){if(!circle)return;var n=7;for(var i=0;i<n;i++){var s=document.createElement('span');s.className='sparkle';var ang=Math.PI*2*(i/n)+(Math.random()*0.7-0.35);var dist=15+Math.random()*12;s.style.setProperty('--dx',(Math.cos(ang)*dist).toFixed(1)+'px');s.style.setProperty('--dy',(Math.sin(ang)*dist).toFixed(1)+'px');s.style.animationDelay=(Math.random()*0.07).toFixed(2)+'s';s.textContent='✦';circle.appendChild(s);(function(sp){setTimeout(function(){sp.remove();},760);})(s);}}
+function flashDone(btn){var card=btn.closest('.ci-card');if(card){card.classList.remove('just-done');void card.offsetWidth;card.classList.add('just-done');setTimeout(function(){card.classList.remove('just-done');},950);}sparkleBurst(btn.querySelector('.ci-circle'));}
+function markDone(btn){var on=!btn.classList.contains('on');btn.classList.toggle('on');if(on)flashDone(btn);updateCount();}
+function markDoneMed(btn){btn.classList.add('on');flashDone(btn);updateCount();var t=btn.closest('.ci-card').querySelector('[data-med]');if(t)t.classList.add('show');}
+function openLog(card){window._logCard=card;window._logN=+card.dataset.n;renderLog();document.getElementById('scrim').classList.add('open');document.getElementById('sheet').classList.add('open');}
+function closeSheet(){document.getElementById('scrim').classList.remove('open');document.getElementById('sheet').classList.remove('open');}
+function renderLog(){
+  var card=window._logCard, unit=card.dataset.unit||'', isP=unit==='g';
+  var target=+card.dataset.target, step=+card.dataset.step||1, n=window._logN;
+  var chips=isP?[['🥚','Eggs','+20g',20],['🍗','Chicken','+25g',25],['🥛','Greek yogurt','+15g',15],['🐟','Salmon','+30g',30]]
+               :[['🥤','A glass','+1',1],['🍶','A bottle','+2',2]];
+  document.getElementById('sheetBody').innerHTML =
+    '<h3>'+(isP?'Log protein':'Log water')+'</h3><div class="ctx">Add a specific amount, or mark today done.</div>'+
+    '<div class="logbig"><button class="logstep" onclick="logAdd('+(-step)+')">–</button>'+
+      '<div class="logval"><b>'+n+'</b><span>of '+target+' '+unit+'</span></div>'+
+      '<button class="logstep" onclick="logAdd('+step+')">+</button></div>'+
+    '<div class="logquick">'+chips.map(function(c){return '<button class="logchip" onclick="logAdd('+c[3]+')"><span>'+c[0]+'</span>'+c[1]+'<b>'+c[2]+'</b></button>';}).join('')+'</div>'+
+    '<button class="btn p block" onclick="logSave(false)">Save</button>'+
+    '<button class="logdone" onclick="logSave(true)">✓ Mark as done</button>';
+}
+function logAdd(a){var t=+window._logCard.dataset.target;window._logN=Math.max(0,Math.min(t,window._logN+a));renderLog();}
+function logSave(done){
+  var card=window._logCard; if(!card)return;
+  var t=+card.dataset.target, unit=card.dataset.unit||'';
+  if(done)window._logN=t;
+  card.dataset.n=window._logN;
+  var complete=window._logN>=t;
+  var chip=card.querySelector('.ci-log')||card.querySelector('.ci-done');
+  if(chip){
+    if(complete) chip.outerHTML='<span class="ci-done on"><span class="ci-circle">✓</span><span class="ci-label">Done</span></span>';
+    else chip.outerHTML='<span class="ci-log">'+window._logN+' of '+t+(unit?' '+unit:'')+' ›</span>';
+  }
+  closeSheet();
+  if(complete){card.classList.remove('just-done');void card.offsetWidth;card.classList.add('just-done');setTimeout(function(){card.classList.remove('just-done');},950);sparkleBurst(card.querySelector('.ci-circle'));}
+  updateCount();
+}
+function updateCount(){var el=document.querySelector('.chkcount');if(!el)return;var list=document.querySelector('#liveSection .ci-list')||document.querySelector('.ci-list');if(!list)return;var total=list.querySelectorAll('.ci-cta, .ci-log, .ci-done').length,done=list.querySelectorAll('.ci-done.on').length;el.textContent=' ('+done+'/'+total+' done)';}
+
+/* ---------- 1 · live section ---------- */
+var sectionItems=[
+  {i:'🩸',t:'Complete your lab work',src:'Dr. Desai ordered baseline labs · results go straight to them',kind:'task',cta:'Start'},
+  {i:'🧘',t:'Lower-body strength',src:'With Nadia · 3× this week',img:trainerPhoto,dur:'22 min',pills:[{c:'Why strength training?'},{c:'Open your Bold movement plan'}]},
+  {i:'🍗',t:'Eat 100g of protein',src:'Protects your muscle',type:'tally',n:40,target:100,step:10,unit:'g',ai:'x',aiLabel:'Easy protein ideas'},
+  {i:'💧',t:'Drink 6 cups of water',src:'Protects your kidneys',type:'tally',n:3,target:6,ai:'x',aiLabel:'Tips to drink more'}
+];
+document.getElementById('liveSection').innerHTML =
+  '<div class="sec-h">To do <small class="chkcount"></small></div>'+
+  '<p class="chkintro">From your care plan · updates after each visit</p>'+
+  '<div class="ci-list">'+sectionItems.map(planItem).join('')+'</div>'+
+  '<details class="howto"><summary>How do to-dos work?</summary>'+
+  '<p class="honor"><b>To-do</b> items (labs, measurements) check off when they’re actually done. <b>Daily habits</b> (water, protein, movement) are gentle reminders — mark what you like, or just tell Bold “I’ve had three glasses.”</p></details>';
+updateCount();
+
+/* ---------- 2 · anatomy (annotated) ---------- */
+var an=document.getElementById('anatomy');
+an.innerHTML = planItem({i:'🍗',t:'Eat 100g of protein',src:'Protects your muscle',type:'honor',pills:[{c:'Easy protein ideas'},{c:'Quick recipes'}]});
+an.insertAdjacentHTML('beforeend',
+  '<span class="pin" style="left:14px;top:8px">Icon</span>'+
+  '<span class="pin" style="left:120px;top:8px">Heading</span>'+
+  '<span class="pin" style="left:120px;bottom:66px">Subcopy (optional)</span>'+
+  '<span class="pin" style="right:14px;top:8px">Trailing control</span>'+
+  '<span class="pin" style="left:14px;bottom:8px">Quick actions · AI entry point (optional)</span>');
+
+/* ---------- 3 · variants ---------- */
+var variants=[
+  {tag:"kind:'task'",name:'To-do task (verifiable)',
+   note:'Purple CTA opens a flow; the system can verify completion. Becomes a static green ✓ when done. Use for labs, measurements, intake, PCP.',
+   item:{i:'🩸',t:'Complete your lab work',src:'Results go straight to Dr. Desai',kind:'task',cta:'Start'}},
+  {tag:"type:'honor'",name:'Honor habit (default)',
+   note:'Toggle Done on/off — honor system, no verification. Also completable by telling Bold in natural language. Use for protein, water, movement.',
+   item:{i:'🍗',t:'Eat 100g of protein',src:'Protects your muscle',type:'honor',ai:'x',aiLabel:'Easy protein ideas'}},
+  {tag:"type:'device'",name:'Device-synced',
+   note:'Read-only synced badge; auto-completes from a connected device. No manual toggle. Use for movement from a watch.',
+   item:{i:'💪',t:'Move 10 minutes',src:'Synced from your watch',type:'device',n:'12 min today'}},
+  {tag:"type:'tally'",name:'Tally / counter',
+   note:'Shows progress as a tappable chip. Tapping the card opens a bottom drawer to dial a specific amount (stepper + food quick-adds) or mark it done (see §5). Steps by the item’s unit — grams for protein, cups for water.',
+   item:{i:'🍗',t:'Eat 100g of protein',src:'Count in grams as you eat',type:'tally',n:40,target:100,step:10,unit:'g',ai:'x',aiLabel:'Easy protein ideas'}},
+  {tag:"kind:'med'",name:'Medication',
+   note:'Tapping Done marks it complete AND opens a side-effect check (Nausea / Dizziness / Can’t keep food down → safety flow / Something else). Try it →',
+   item:{i:'💊',t:'Take your medication',src:'Your weekly dose · check in for side effects after',kind:'med'}},
+  {tag:"class: img + dur",name:'Fitness class (trainer headshot + duration)',
+   note:'Same card, but the icon slot holds the trainer’s headshot (set img) and the trailing control is a video-duration play pill (set dur) instead of a Done toggle — tapping plays the class. Pills deep-link to the Bold weight-management program.',
+   item:{i:'🧘',t:'Lower-body strength',src:'With Nadia · 3× this week',img:trainerPhoto,dur:'22 min',pills:[{c:'See recommended class'},{c:'Open your Bold movement plan'}]}}
+];
+document.getElementById('variants').innerHTML = variants.map(function(v){
+  return '<div class="variant"><div class="canvas">'+planItem(v.item)+'</div>'+
+    '<div class="spec-note"><div class="vtitle"><h3>'+v.name+'</h3><code>'+v.tag+'</code></div><p>'+v.note+'</p></div></div>';
+}).join('');
+
+/* ---------- 5 · interaction & motion demo ---------- */
+document.getElementById('motionDemo').innerHTML = [
+  planItem({i:'🍗',t:'Eat 100g of protein',src:'Tap Done to see the animation',type:'honor'}),
+  planItem({i:'💊',t:'Take your medication',src:'Done → opens side-effect check',kind:'med'}),
+  planItem({i:'🍗',t:'Eat 100g of protein',src:'Tap to open the log drawer',type:'tally',n:40,target:100,step:10,unit:'g'}),
+  planItem({i:'💧',t:'Drink 6 cups of water',src:'Tap to open the log drawer',type:'tally',n:3,target:6})
+].join('');
+
+/* ---------- 4 · content variants ---------- */
+document.getElementById('contentVars').innerHTML = [
+  planItem({i:'🍗',t:'Eat 100g of protein',src:'Protects your muscle',type:'honor'}),                      // subcopy
+  planItem({i:'🍗',t:'Eat 100g of protein',type:'honor'}),                                                 // compact, no subcopy
+  planItem({i:'🍗',t:'Eat 100g of protein',src:'Protects your muscle',type:'honor',done:true}),            // done
+  planItem({i:'💧',t:'Drink 6 cups of water',src:'Tap to count as you go',type:'tally',n:6,target:6})       // in-progress / complete
+].join('');
+</script>
+</body>
+</html>
