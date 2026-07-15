@@ -351,6 +351,7 @@
   .note p{font-size:13px;color:var(--ink-2);margin:0 0 10px}
   .note .k{display:flex;gap:8px;font-size:12.5px;color:var(--ink-2);margin-bottom:7px;align-items:flex-start}
   .note .k b{color:var(--ink)}
+  .note .note-model{font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:10px;margin-top:2px}
   .legend span{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-2);margin-right:12px}
   .sw{width:12px;height:12px;border-radius:3px;display:inline-block}
   @media(max-width:560px){.phone{transform:scale(.95);transform-origin:top center}}
@@ -809,15 +810,18 @@ const messages = ()=>`
 
 /* ---------- side note per tab ---------- */
 const notes = {
-  today:{h:'Today — the checklist, across 5 states',p:'No separate “Today’s Plan” — the tab is one <b>checklist</b> whose contents change by clinical state. It mixes <b>to-do tasks</b> the system can verify (forms, labs) with <b>honor-system habits</b> it can’t (protein, water, movement), plus a program card and a reading rail below.',k:[
-    ['State 1 · Paperwork','The first visit shows as “on hold.” Checklist is the required consents (HIPAA, New Patient Agreement, Telemedicine) plus the intake form (PHQ-2, STEADI). Forms open a review-and-sign page.'],
-    ['State 2 · Pre-visit','Visit confirmed. Foundational movement + education while waiting, honest that the personalized plan comes after the visit.'],
-    ['State 3 · Post-visit → labs','A real task (complete labs) alongside a trainer-led class and tap-to-log protein & water from Dr. Desai’s care plan.'],
-    ['State 4 · On medication','Med check-in folds into the header. Checklist leads with “take your medication” (opens a side-effect check), then the class and tap-to-log habits; a refill-review banner sits below.'],
-    ['State 5 · Maintenance','Steady habits: the trainer-led class plus tap-to-log protein & water, a momentum module, and next-visit prep.'],
-    ['Med check-in','Lives in the header (greeting block) for medication states — one strip, not a separate card.'],
-    ['Bold is here','The greeting is the way in; per-item “Ask Bold,” and natural-language logging.']
-  ]},
+  today:{h:'Today',
+    p:'One <b>checklist</b> whose contents change by clinical state — verifiable <b>tasks</b> (forms, labs) plus honor-system <b>habits</b> (protein, water, movement), with a program card and reading rail below.',
+    states:{
+      s1:['State 1 · Sign-up → Paperwork','The first visit shows as “on hold.” The checklist is the required consents (HIPAA, New Patient Agreement, Telemedicine) plus the intake form (PHQ-2, STEADI). Forms open a review-and-sign page.'],
+      s2:['State 2 · Pre-visit','Visit confirmed. Foundational movement + education while waiting, honest that the personalized plan comes after the visit.'],
+      s3:['State 3 · Post-visit → Labs','A real task (complete labs) alongside a trainer-led class and tap-to-log protein & water from Dr. Desai’s care plan.'],
+      s4:['State 4 · On medication','Med check-in folds into the header. The checklist leads with “take your medication” (opens a side-effect check), then the class and tap-to-log habits; a refill-review banner sits below.'],
+      s5:['State 5 · Maintenance','Steady habits: the trainer-led class plus tap-to-log protein & water, a momentum module, and next-visit prep.']
+    },
+    k:[
+      ['Bold is here','The greeting is the way in; per-item “Ask Bold,” and natural-language logging.']
+    ]},
   care:{h:'Care — the human layer',p:'Makes supervision tangible: the accountability partner made visible.',k:[
     ['Care team','Faces + roles, one tap to message.'],
     ['Appointments','Refill reviews flagged as mandatory (“not auto-renewed”).'],
@@ -926,8 +930,16 @@ function render(){
   updateChkCount();
   applySky();
   const n=notes[tab];
-  document.getElementById('note').innerHTML =
-    `<h3>${n.h}</h3><p>${n.p}</p>${n.k.map(x=>`<div class="k"><b>${x[0]}:</b><span>${x[1]}</span></div>`).join('')}`;
+  const kHtml=x=>`<div class="k"><b>${x[0]}:</b><span>${x[1]}</span></div>`;
+  if(tab==='today' && n.states){
+    const st=n.states[variant]||n.states.s1;
+    document.getElementById('note').innerHTML =
+      `<h3>${n.h} — ${st[0].replace(/^State \d+ · /,'')}</h3><p>${st[1]}</p>`+
+      `<p class="note-model">${n.p}</p>`+n.k.map(kHtml).join('');
+  } else {
+    document.getElementById('note').innerHTML =
+      `<h3>${n.h}</h3><p>${n.p}</p>${n.k.map(kHtml).join('')}`;
+  }
   document.querySelectorAll('#tabbar .tab').forEach(b=>b.classList.toggle('on',b.dataset.t===tab));
   document.querySelectorAll('#variantSeg button').forEach(b=>b.classList.toggle('on',b.dataset.v===variant));
 }
