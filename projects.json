@@ -1,0 +1,112 @@
+{
+  "projects": [
+    {
+      "path": "prototype.html",
+      "href": "prototype.html",
+      "name": "Interactive Prototype",
+      "desc": "Today, Discover, Care, Profile, and Notifications for the member app",
+      "icon": "📱",
+      "author": "Izabela",
+      "category": "Prototypes"
+    },
+    {
+      "path": "Bold-Wireframes.html",
+      "href": "Bold-Wireframes.html",
+      "name": "Wireframes",
+      "desc": "Member experience wireframes for the Today flow",
+      "icon": "🧩",
+      "author": "Izabela",
+      "category": "Prototypes"
+    },
+    {
+      "path": "Bold-Sitemap.html",
+      "href": "Bold-Sitemap.html",
+      "name": "Sitemap",
+      "desc": "Information architecture and navigation map",
+      "icon": "🗺️",
+      "author": "Izabela",
+      "category": "Design System"
+    },
+    {
+      "path": "Bold-ToDo-Card-Spec.html",
+      "href": "Bold-ToDo-Card-Spec.html",
+      "name": "To-Do Card Spec",
+      "desc": "Interactive spec for the to-do card component",
+      "icon": "✅",
+      "author": "Izabela",
+      "category": "Design System"
+    },
+    {
+      "path": "docs/Bold-ToDo-Card-Spec.md",
+      "href": "https://github.com/izabela-del/prototype-test/blob/main/docs/Bold-ToDo-Card-Spec.md",
+      "name": "To-Do Card Spec (written)",
+      "desc": "Written spec for the to-do card component (Markdown)",
+      "icon": "📝",
+      "author": "Izabela",
+      "category": "Design System"
+    },
+    {
+      "path": "Bold-Checklist-Explorations.html",
+      "href": "Bold-Checklist-Explorations.html",
+      "name": "Checklist Explorations",
+      "desc": "Studies for the daily checklist pattern",
+      "icon": "📋",
+      "author": "Izabela",
+      "category": "Design System"
+    },
+    {
+      "path": "Bold-Priority-Banner.html",
+      "href": "Bold-Priority-Banner.html",
+      "name": "Priority Banner",
+      "desc": "Priority banner component study",
+      "icon": "🚩",
+      "author": "Izabela",
+      "category": "Design System"
+    },
+    {
+      "path": "Bold-SunMoon-Greeting.html",
+      "href": "Bold-SunMoon-Greeting.html",
+      "name": "Sun / Moon Greeting",
+      "desc": "Time-of-day greeting component study",
+      "icon": "🌗",
+      "author": "Izabela",
+      "category": "Design System"
+    },
+    {
+      "path": "vision.html",
+      "href": "vision.html",
+      "name": "Product Vision",
+      "desc": "The strategy behind Bold and the experience it produces",
+      "icon": "✦",
+      "author": "Izabela",
+      "category": "Strategy"
+    },
+    {
+      "path": "docs/Bold-IA-Plan.md",
+      "href": "https://github.com/izabela-del/prototype-test/blob/main/docs/Bold-IA-Plan.md",
+      "name": "IA Plan",
+      "desc": "Information architecture plan (Markdown)",
+      "icon": "📐",
+      "author": "Izabela",
+      "category": "Strategy"
+    },
+    {
+      "path": "docs/Bold-AI-Chat-System-Prompt.md",
+      "href": "https://github.com/izabela-del/prototype-test/blob/main/docs/Bold-AI-Chat-System-Prompt.md",
+      "name": "AI Chat System Prompt",
+      "desc": "System prompt for the Bold AI chat (Markdown)",
+      "icon": "🤖",
+      "author": "Izabela",
+      "category": "Strategy"
+    },
+    {
+      "path": "docs/Bold-Chat-Content-Spec-Proposed-Edits.md",
+      "href": "https://github.com/izabela-del/prototype-test/blob/main/docs/Bold-Chat-Content-Spec-Proposed-Edits.md",
+      "name": "Chat Content Spec",
+      "desc": "Proposed edits to chat content (Markdown)",
+      "icon": "💬",
+      "author": "Izabela",
+      "category": "Strategy"
+    }
+  ]
+}

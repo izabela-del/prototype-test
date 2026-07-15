@@ -4,10 +4,38 @@ Interactive prototype and product vision page for Bold's adaptive daily guidance
 
 ## How to Review
 
-Open in any browser — no build tools required:
+Open the deployed site (or serve the folder locally with `python3 -m http.server`):
 
-- **`index.html`** — Product vision & strategy (homepage)
+- **`index.html`** — Simple index; lists every prototype, study, and spec
 - **`prototype.html`** — Interactive prototype (Today, Discover, Care, Profile, Notifications)
+- **`vision.html`** — Product vision & strategy
+
+## Editing the index
+
+The index list is driven by **`projects.json`** — `index.html` renders it at load,
+so add / edit / reorder entries there rather than editing the HTML. Each entry:
+
+```json
+{
+  "path": "prototype.html",
+  "href": "prototype.html",
+  "name": "Interactive Prototype",
+  "desc": "One-line description",
+  "icon": "📱",
+  "author": "Izabela",
+  "category": "Prototypes"
+}
+```
+
+| Field | Value |
+|---|---|
+| `path` | Repo-relative file path (shown as the muted path label) |
+| `href` | Link to open — a local file, or a full URL (e.g. a GitHub blob for Markdown) |
+| `name` | Title shown on the index |
+| `desc` | Subtitle (one line) |
+| `icon` | Any emoji |
+| `author` | `Izabela`, `Tzu-Yi`, or `Monica` |
+| `category` | `Prototypes`, `Design System`, `User Research`, or `Strategy` |
 
 ## Design Principles
 
