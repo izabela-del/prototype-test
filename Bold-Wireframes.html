@@ -99,7 +99,8 @@
   .ci-photo{background-color:#E7ECF2;background-size:cover;background-position:center top;font-size:0;box-shadow:0 3px 8px rgba(16,24,40,.18)}
   .ci-title{flex:1;min-width:0;font-family:var(--sans);font-weight:600;font-size:16px;line-height:1.3;color:#171717;margin:0}
   .ci-desc{font-family:var(--sans);font-size:14px;line-height:1.4;color:#4D4D4D;margin:8px 0 0 52px}
-  .ci-head>.ci-done,.ci-head>.ci-cta,.ci-head>.synced,.ci-head>.tally,.ci-head>.ci-log,.ci-head>.ci-dur{margin-left:auto}
+  .ci-head>.ci-done,.ci-head>.ci-cta,.ci-head>.synced,.ci-head>.tally,.ci-head>.ci-log,.ci-head>.ci-dur,.ci-head>.ci-time{margin-left:auto}
+  .ci-time{display:inline-flex;align-items:center;gap:4px;color:var(--muted);font-size:12.5px;font-weight:600;white-space:nowrap}
   .ci-dur{display:inline-flex;align-items:center;gap:6px;background:var(--purple-soft);color:var(--purple);border:0;border-radius:20px;padding:6px 12px;font-size:13px;font-weight:700;font-family:var(--sans);cursor:pointer;white-space:nowrap;transition:background .15s ease}
   .ci-dur:hover{background:#EBE1FF}
   .ci-dur .pl{font-size:9px}
@@ -558,6 +559,7 @@ function planItem(it){
   else if(it.kind==='task') top = it.done ? '<span class="ci-done on"><span class="ci-circle">✓</span><span class="ci-label">Done</span></span>' : '<button class="ci-cta" onclick="'+(it.doc?('openDoc(\''+it.doc+'\')'):('openAI(\''+it.t+'\',\''+(it.ai||'')+'\')'))+'">'+(it.cta||'Start')+' ›</button>';
   else if(it.kind==='med') top='<button class="ci-done'+(it.done?' on':'')+'" onclick="markDoneMed(this)"><span class="ci-circle">✓</span><span class="ci-label">Done</span></button>';
   else if(it.dur) top='<button class="ci-dur" onclick="openAI(\''+it.t+'\',\''+(it.ai||'')+'\')"><span class="pl">▶</span>'+it.dur+'</button>';
+  else if(it.kind==='step'){cardCls='ci-card ci-tap';cardAttr=' onclick="openAI(\''+it.t+'\',\''+(it.ai||'')+'\')"';top='<span class="ci-time">◷ '+(it.time||'')+'</span>';}
   else top='<button class="ci-done'+(it.done?' on':'')+'" onclick="markDone(this)"><span class="ci-circle">✓</span><span class="ci-label">Done</span></button>';
   var pills='';
   if(it.pills) pills=it.pills.map(function(p){return '<button class="ci-pill" onclick="event.stopPropagation();openAI(\''+p.c+'\',\''+p.a+'\')">'+p.c+'</button>';}).join('');
@@ -675,15 +677,14 @@ const todayS1 = ()=>`
 
 /* STATE 2 — Paperwork done → Visit (pre-visit, foundational, honest it’s not personalized yet) */
 const todayS2 = ()=>`
-  ${juneHero('You’re all set for your first visit on Monday. Here’s something useful while you wait.',[{c:'What happens at my first visit?',a:'Here’s what your first visit looks like, step by step. Nothing to worry about.'},{c:'Why isn’t my plan personalized yet?',a:'Good question. Your full plan unlocks after you meet your provider — for now these steps are safe for everyone.'}])}
+  ${juneHero('Your upcoming weight loss appointment is confirmed.',[{c:'What happens at my first visit?',a:'Here is what your first visit looks like, step by step. Nothing to worry about.'},{c:'Why is my plan not personalized yet?',a:'Good question. Your full plan unlocks after you meet your provider. For now these steps are safe for everyone.'}])}
   ${apptCard}
-  <div class="card pad trust">
-    <div class="row"><span class="chip soft">🔓</span><div><p class="t">Your full plan unlocks after your visit</p><p class="d">Until you meet Dr. Desai, here are foundational steps that are safe and helpful for everyone. Your personalized plan comes next.</p></div></div>
-  </div>
-  <div class="sec-h">While you wait</div>
+  <div class="sec-h">To do <small>1/4 done</small></div>
+  <p class="chkintro">Optional steps to personalize your care.</p>
   ${cards([
-    {i:'💪',t:'Gentle strength & balance',src:'A safe place to start · 10 min',kind:'task',cta:'Start',ai:'Show me the gentle strength & balance routine for getting started.'},
-    {i:'📖',t:'Preserving muscle as you lose weight',src:'Why strength matters at every stage · 4 min',kind:'task',cta:'Read',ai:'Give me the key points on preserving muscle while losing weight.'},
+    {i:'📏',t:'Share your measurements',src:'Waist and height help your doctor plan your care',kind:'step',time:'5 min',ai:'How do I measure my waist and height correctly?'},
+    {i:'〰️',t:'Your first movement check',src:'A simple sit-to-stand to see where you are starting from',kind:'step',time:'1 min',ai:'How do I do the sit-to-stand movement check safely?'},
+    {i:'🧘',t:'Get your fitness plan',src:'A few quick questions to get a plan tailored to you',kind:'step',time:'5 min',ai:'What questions will you ask to build my fitness plan?'},
   ])}
   ${fromTeam}`;
 
