@@ -83,6 +83,7 @@
   .honor b{color:var(--ink-2)}
   .chkintro{font-size:13px;color:var(--muted);margin:-2px 2px 12px;line-height:1.5}
   .clink{color:var(--purple);font-weight:700;cursor:pointer;white-space:nowrap}
+  .tbd{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#8A6D00;background:#FCF3CF;border-radius:20px;padding:2px 8px;margin-left:6px;vertical-align:middle}
   .docwrap{max-height:46vh;overflow-y:auto;margin-bottom:14px;padding-right:4px}
   .docp{font-size:14px;color:var(--ink-2);line-height:1.55;margin-bottom:12px}
   .docp b{color:var(--ink)}
@@ -559,7 +560,7 @@ function planItem(it){
   }
   else if(it.kind==='task') top = it.done ? '<span class="ci-done on"><span class="ci-circle">✓</span><span class="ci-label">Done</span></span>' : '<button class="ci-cta" onclick="'+(it.doc?('openDoc(\''+it.doc+'\')'):('openAI(\''+it.t+'\',\''+(it.ai||'')+'\')'))+'">'+(it.cta||'Start')+' ›</button>';
   else if(it.kind==='med') top='<button class="ci-done'+(it.done?' on':'')+'" onclick="markDoneMed(this)"><span class="ci-circle">✓</span><span class="ci-label">Done</span></button>';
-  else if(it.dur) top='<button class="ci-dur" onclick="openAI(\''+it.t+'\',\''+(it.ai||'')+'\')"><span class="pl">▶</span>'+it.dur+'</button>';
+  else if(it.dur){cardCls='ci-card ci-tap';cardAttr=' onclick="openClass(\''+it.t+'\')"';top='<button class="ci-dur" onclick="event.stopPropagation();openClass(\''+it.t+'\')"><span class="pl">▶</span>'+it.dur+'</button>';}
   else if(it.kind==='step'){cardCls='ci-card ci-tap';cardAttr=' onclick="openAI(\''+it.t+'\',\''+(it.ai||'')+'\')"';top='<span class="ci-time">◷ '+(it.time||'')+'</span>';}
   else top='<button class="ci-done'+(it.done?' on':'')+'" onclick="markDone(this)"><span class="ci-circle">✓</span><span class="ci-label">Done</span></button>';
   var pills='';
@@ -914,6 +915,15 @@ function renderAnswer(ctx,answer,follow){
   document.getElementById('aiBody').innerHTML=
     '<div class="ctx">Context · '+ctx+'</div><div class="bubble ai">'+answer+'</div>'+fh+
     '<div class="ctx" style="margin-top:14px">Need a person?</div><div class="qr"><button onclick="closeAI();go(\'msg\')">Get my care team ›</button></div>';
+  document.getElementById('aiPanel').classList.add('open');
+}
+/* Class card opens the class player page (not built yet) — placeholder + Designs TBD flag. */
+function openClass(t){
+  setHead('Class',false);
+  document.getElementById('aiBody').innerHTML=
+    '<div class="ctx">'+t+' · with Nadia</div>'+
+    '<div class="bubble ai" style="max-width:100%">▶ Opens the class player, where your guided video plays. <span class="tbd">Designs TBD</span></div>'+
+    '<p class="d" style="text-align:center;margin-top:10px">This screen is still being designed.</p>';
   document.getElementById('aiPanel').classList.add('open');
 }
 function openAI(ctx,msg){
