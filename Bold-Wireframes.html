@@ -893,12 +893,8 @@ function openAI(ctx,msg){
   document.getElementById('aiBody').innerHTML =
     `<div class="ctx">Context · ${ctx}</div>
      <div class="bubble ai">${msg}</div>
-     <div class="ctx" style="margin-top:14px">Try asking</div>
-     <div class="qr">
-       <button>Explain this simply</button>
-       <button>Show me a short video</button>
-       <button>Get my care team</button>
-     </div>`;
+     <div class="ctx" style="margin-top:14px">Need a person?</div>
+     <div class="qr"><button onclick="closeAI();go('msg')">Get my care team ›</button></div>`;
   document.getElementById('aiPanel').classList.add('open');
 }
 function logFine(){
