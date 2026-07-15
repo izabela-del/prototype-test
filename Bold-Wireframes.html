@@ -82,6 +82,9 @@
   .honor{font-size:12px;color:var(--muted);margin:9px 2px 2px;line-height:1.5}
   .honor b{color:var(--ink-2)}
   .chkintro{font-size:13px;color:var(--muted);margin:-2px 2px 12px;line-height:1.5}
+  .docwrap{max-height:46vh;overflow-y:auto;margin-bottom:14px;padding-right:4px}
+  .docp{font-size:14px;color:var(--ink-2);line-height:1.55;margin-bottom:12px}
+  .docp b{color:var(--ink)}
   .howto{margin:12px 2px 2px}
   .howto>summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:var(--purple)}
   .howto>summary::-webkit-details-marker{display:none}
@@ -550,7 +553,7 @@ function planItem(it){
     cardAttr=' data-n="'+it.n+'" data-target="'+it.target+'" data-step="'+(it.step||1)+'" data-unit="'+(it.unit||'')+'" onclick="openLog(this)"';
     top='<span class="ci-log">'+it.n+' of '+it.target+(it.unit?' '+it.unit:'')+' ›</span>';
   }
-  else if(it.kind==='task') top = it.done ? '<span class="ci-done on"><span class="ci-circle">✓</span><span class="ci-label">Done</span></span>' : '<button class="ci-cta" onclick="openAI(\''+it.t+'\',\''+(it.ai||'')+'\')">'+(it.cta||'Start')+' ›</button>';
+  else if(it.kind==='task') top = it.done ? '<span class="ci-done on"><span class="ci-circle">✓</span><span class="ci-label">Done</span></span>' : '<button class="ci-cta" onclick="'+(it.doc?('openDoc(\''+it.doc+'\')'):('openAI(\''+it.t+'\',\''+(it.ai||'')+'\')'))+'">'+(it.cta||'Start')+' ›</button>';
   else if(it.kind==='med') top='<button class="ci-done'+(it.done?' on':'')+'" onclick="markDoneMed(this)"><span class="ci-circle">✓</span><span class="ci-label">Done</span></button>';
   else if(it.dur) top='<button class="ci-dur" onclick="openAI(\''+it.t+'\',\''+(it.ai||'')+'\')"><span class="pl">▶</span>'+it.dur+'</button>';
   else top='<button class="ci-done'+(it.done?' on':'')+'" onclick="markDone(this)"><span class="ci-circle">✓</span><span class="ci-label">Done</span></button>';
@@ -659,10 +662,10 @@ const todayS1 = ()=>`
   ${apptCardHold}
   <div class="sec-h">Before your first visit <small>0 of 4 done</small></div>
   ${cards([
-    {i:'🔒',t:'HIPAA Notice of Privacy Practices',src:'How your health information is used and protected',kind:'task',cta:'Review',ai:'What does the HIPAA Notice of Privacy Practices cover?'},
-    {i:'📋',t:'New Patient Agreement',src:'How telehealth care and billing work',kind:'task',cta:'Review',ai:'What am I agreeing to in the New Patient Agreement?'},
-    {i:'💻',t:'Telemedicine consent',src:'Care by video, and when to call 911',kind:'task',cta:'Review',ai:'What are the benefits and limits of telemedicine care?'},
-    {i:'📝',t:'Weight management intake form',src:'Health history and habits, plus the PHQ-2 and STEADI screenings',kind:'task',cta:'Start',ai:'What is in the intake form, and how long does it take?'},
+    {i:'🔒',t:'HIPAA Notice of Privacy Practices',src:'How your health information is used and protected',kind:'task',cta:'Review',doc:'hipaa'},
+    {i:'📋',t:'New Patient Agreement',src:'How telehealth care and billing work',kind:'task',cta:'Review',doc:'npa'},
+    {i:'💻',t:'Telemedicine consent',src:'Care by video, and when to call 911',kind:'task',cta:'Review',doc:'telemedicine'},
+    {i:'📝',t:'Weight management intake form',src:'Health history and habits, plus the PHQ-2 and STEADI screenings',kind:'task',cta:'Start',doc:'intake'},
   ])}
   <p class="chkintro">A Care Coordinator will walk you through the three consents by phone and note your verbal okay, so nothing holds up your visit.</p>
   <div class="lock"><span>📅</span> Your visit stays on hold until your consents and intake form are complete.</div>
@@ -838,6 +841,46 @@ function setHead(name,sphere){
   document.getElementById('aiName').textContent=name;
   document.getElementById('aiSphere').style.display=sphere?'inline-block':'none';
   document.getElementById('aiInputWrap').style.display=sphere?'flex':'none';
+}
+/* Standard forms open a review-and-sign page by default (not the AI chat).
+   A quiet "Ask Bold" link is available for help — the future AI-onboarding angle. */
+const DOCS={
+  hipaa:{title:'HIPAA Notice of Privacy Practices',action:'I have reviewed this',
+    done:'Reviewed. Your Care Coordinator will confirm your consent by phone.',
+    body:['This notice explains how your protected health information may be used and shared, and the rights you have over it.',
+      'Bold and your care team use your information to provide and coordinate your care, for billing, and for required health-care operations. It is shared only as allowed or required by law.',
+      'You have the right to see and get a copy of your records, ask for corrections, and receive a list of certain disclosures.']},
+  npa:{title:'New Patient Agreement',action:'I have reviewed this',
+    done:'Reviewed. Your Care Coordinator will confirm your consent by phone.',
+    body:['Medical care is provided by licensed clinicians through telehealth. Bold Care provides the technology and administrative support around your care.',
+      'This agreement covers how visits, follow-ups, and billing work, including what your plan covers and what you may owe.',
+      'You can ask questions at any time, and you can end care with Bold whenever you choose.']},
+  telemedicine:{title:'Informed Consent: Telemedicine',action:'I have reviewed this',
+    done:'Reviewed. Your Care Coordinator will confirm your consent by phone.',
+    body:['Telemedicine lets you meet your clinician by secure video instead of in person. It adds convenience and access, with some limits compared with an in-person visit.',
+      'If the connection drops or a concern needs hands-on care, your clinician may ask to see you in person.',
+      'For any medical emergency, call 911. Telemedicine is not for emergencies.']},
+  intake:{title:'Weight management intake form',action:'Start the form',
+    done:'Opening your intake form.',
+    body:['This form gathers your health history, weight goals, and everyday habits around nutrition, sleep, and activity.',
+      'It also includes two short, required screenings: the PHQ-2 for mood, and the STEADI fall-risk check for adults 65 and older.',
+      'You can save and come back anytime. It takes about 10 minutes.']}
+};
+function openDoc(key){
+  var d=DOCS[key]; if(!d)return;
+  setHead(d.title,false);
+  document.getElementById('aiBody').innerHTML =
+    '<div class="ctx">Please read this, then confirm below.</div>'+
+    '<div class="docwrap">'+d.body.map(function(p){return '<p class="docp">'+p+'</p>';}).join('')+'</div>'+
+    '<button class="btn p block" onclick="docDone(\''+key+'\')">'+d.action+'</button>'+
+    '<button class="softlink" onclick="openAI(\''+d.title+'\',\'Happy to explain anything in this form in plain language. What would you like to know?\')">Have a question? Ask Bold</button>';
+  document.getElementById('aiPanel').classList.add('open');
+}
+function docDone(key){
+  var d=DOCS[key]||{};
+  document.getElementById('aiBody').innerHTML =
+    '<div class="bubble" style="background:var(--green-soft);border:1px solid #BDE9CD;max-width:100%">✓ '+(d.done||'Recorded.')+'</div>'+
+    '<p class="d" style="text-align:center;margin-top:8px">You can close this and come back anytime.</p>';
 }
 function openAI(ctx,msg){
   setHead('Bold',true);
