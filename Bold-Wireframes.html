@@ -563,7 +563,7 @@ function planItem(it){
   else top='<button class="ci-done'+(it.done?' on':'')+'" onclick="markDone(this)"><span class="ci-circle">✓</span><span class="ci-label">Done</span></button>';
   var pills='';
   if(it.pills) pills=it.pills.map(function(p){return '<button class="ci-pill" onclick="event.stopPropagation();openAI(\''+p.c+'\',\''+p.a+'\')">'+p.c+'</button>';}).join('');
-  else if(it.kind!=='task' && it.ai) pills='<button class="ci-pill" onclick="event.stopPropagation();openAI(\''+it.t+'\',\''+it.ai+'\')">'+it.aiLabel+'</button>';
+  else if(it.kind!=='task' && it.ai && it.aiLabel) pills='<button class="ci-pill" onclick="event.stopPropagation();openAI(\''+it.t+'\',\''+it.ai+'\')">'+it.aiLabel+'</button>';
   return '<div class="'+cardCls+'"'+cardAttr+'>'+
     '<div class="ci-body">'+
       '<div class="ci-head">'+(it.img?'<span class="ci-icon ci-photo" style="background-image:url(\''+it.img+'\')"></span>':'<span class="ci-icon">'+it.i+'</span>')+'<p class="ci-title">'+it.t+'</p>'+top+'</div>'+

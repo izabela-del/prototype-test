@@ -394,7 +394,7 @@ function planItem(it){
   else top='<button class="ci-done'+(it.done?' on':'')+'" onclick="markDone(this)"><span class="ci-circle">✓</span><span class="ci-label">Done</span></button>';
   var pills='';
   if(it.pills) pills=it.pills.map(function(p){return '<button class="ci-pill" onclick="event.stopPropagation()">'+p.c+'</button>';}).join('');
-  else if(it.kind!=='task' && it.ai) pills='<button class="ci-pill" onclick="event.stopPropagation()">'+it.aiLabel+'</button>';
+  else if(it.kind!=='task' && it.ai && it.aiLabel) pills='<button class="ci-pill" onclick="event.stopPropagation()">'+it.aiLabel+'</button>';
   var med = it.kind==='med' ? '<div class="toast" data-med>✓ Logged for today. A quick safety check — any side effects since your dose?'+
     '<div class="symrow"><span class="symchip">Nausea</span><span class="symchip">Dizziness</span><span class="symchip warn">Can’t keep food down</span><span class="symchip">Something else</span></div></div>' : '';
   return '<div class="'+cardCls+'"'+cardAttr+'>'+
