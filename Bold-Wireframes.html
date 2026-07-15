@@ -661,7 +661,8 @@ const sideCheck = (compact)=>`
 const todayS1 = ()=>`
   ${juneHero('Welcome to Bold, Carol. A few quick forms stand between you and your first visit.',[{c:'What do I need to do?',a:'Three quick consents by phone with your Care Coordinator, plus an intake form you fill out here. I can walk you through each one.'},{c:'Why do you need these?',a:'These are standard privacy and telehealth agreements, plus the health history your clinician needs to care for you safely.'}])}
   ${apptCardHold}
-  <div class="sec-h">Before your first visit <small>0 of 4 done</small></div>
+  <div class="sec-h">Complete these to see your doctor <small>0 of 4 done</small></div>
+  <p class="chkintro">Your first visit with Dr. Desai stays on hold until all four are done: three quick consents, then your intake form.</p>
   ${cards([
     {i:'🔒',t:'HIPAA Notice of Privacy Practices',src:'How your health information is used and protected',kind:'task',cta:'Review',doc:'hipaa'},
     {i:'📋',t:'New Patient Agreement',src:'How telehealth care and billing work',kind:'task',cta:'Review',doc:'npa'},
@@ -669,7 +670,6 @@ const todayS1 = ()=>`
     {i:'📝',t:'Weight management intake form',src:'Health history and habits, plus the PHQ-2 and STEADI screenings',kind:'task',cta:'Start',doc:'intake'},
   ])}
   <p class="chkintro">A Care Coordinator will walk you through the three consents by phone and note your verbal okay, so nothing holds up your visit.</p>
-  <div class="lock"><span>📅</span> Your visit stays on hold until your consents and intake form are complete.</div>
   ${fromTeam}`;
 
 /* STATE 2 — Paperwork done → Visit (pre-visit, foundational, honest it’s not personalized yet) */
