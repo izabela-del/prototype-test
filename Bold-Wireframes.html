@@ -52,6 +52,10 @@
   .statenav-inner{max-width:1180px;margin:0 auto;padding:10px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
   .statenav-lbl{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
   .statenav-hint{font-size:12px;color:var(--muted);margin-left:auto}
+  .statenav-time{display:flex;align-items:center;gap:10px;margin-left:auto}
+  .statenav .timec{padding:6px 12px}
+  .statenav .timec input[type=range]{width:148px}
+  .statenav .clock{min-width:96px}
   .stage{display:flex;gap:34px;align-items:flex-start;flex-wrap:wrap;justify-content:center}
 
   /* phone */
@@ -391,7 +395,14 @@
       <button data-v="s4">4 · On medication</button>
       <button data-v="s5">5 · Maintenance</button>
     </div>
-    <span class="statenav-hint">Affects Today only</span>
+    <div class="statenav-time">
+      <span class="statenav-lbl">Time</span>
+      <div class="timec">
+        <input type="range" id="timeSlider" min="0" max="24" step="0.25">
+        <span class="clock" id="clockLbl"></span>
+      </div>
+      <button class="tbtn" id="autoBtn">Auto</button>
+    </div>
   </div>
 </nav>
 <div class="page">
@@ -408,19 +419,6 @@
     <p class="wip">A work in progress — some screens are still concept (flagged in-app), and copy is being finalized. Best viewed on a desktop browser.</p>
   </div>
 
-  <div class="ctrl-row">
-    <div class="ctrl">
-      <div class="ctrl-lbl">Time of day</div>
-      <div class="ctrl-inline">
-        <div class="timec">
-          <input type="range" id="timeSlider" min="0" max="24" step="0.25">
-          <span class="clock" id="clockLbl"></span>
-        </div>
-        <button class="tbtn" id="autoBtn">Use real time</button>
-      </div>
-      <div class="ctrl-hint">Preview Today through the day. Affects Today only.</div>
-    </div>
-  </div>
 
   <div class="stage">
     <div class="phone">
