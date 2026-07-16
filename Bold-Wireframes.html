@@ -33,6 +33,9 @@
   .head .wip{font-size:13px;color:var(--muted);font-style:italic}
   .tourbtn{display:inline-flex;align-items:center;gap:8px;border:1.5px solid var(--purple);background:var(--purple-soft);color:var(--purple);border-radius:100px;padding:9px 17px;font-size:13.5px;font-weight:700;cursor:pointer;font-family:var(--sans);margin:2px 0 16px}
   .tourbtn:hover{background:#EBE1FF}
+  .tourbtn.pulse{animation:tourpulse 1.8s ease-out infinite}
+  @keyframes tourpulse{0%{box-shadow:0 0 0 0 rgba(109,40,217,.5)}70%{box-shadow:0 0 0 12px rgba(109,40,217,0)}100%{box-shadow:0 0 0 0 rgba(109,40,217,0)}}
+  @media (prefers-reduced-motion:reduce){.tourbtn.pulse{animation:none}}
   .tourbtn .pl{font-size:10px}
   /* guided tour */
   .tour{position:fixed;inset:0;z-index:200;display:none;pointer-events:none}
@@ -431,7 +434,7 @@
     <div class="eyebrow">Bold · Member app</div>
     <h1>Member app wireframes</h1>
     <p>An interactive, low-fidelity wireframe of the older-adult GLP-1 experience. It’s clickable, so feel free to poke around.</p>
-    <button class="tourbtn" id="tourStart"><span class="pl">▶</span> Take a quick tour</button>
+    <button class="tourbtn pulse" id="tourStart"><span class="pl">▶</span> Take a quick tour</button>
     <p class="wip">A work in progress — some screens are still concept (flagged in-app), and copy is being finalized. Best viewed on a desktop browser.</p>
   </div>
 
@@ -1080,6 +1083,7 @@ function positionTour(el){
   tip.style.top=top+'px'; tip.style.left=left+'px';
 }
 function tourShow(i){
+  stopPulse();
   tourI=Math.max(0,Math.min(TOUR.length-1,i));
   var s=TOUR[tourI], el=document.querySelector(s.sel);
   tourEl.classList.add('on');
@@ -1094,7 +1098,10 @@ function tourShow(i){
   setTimeout(()=>positionTour(el),320);
 }
 function tourEnd(){tourEl.classList.remove('on');}
-document.getElementById('tourStart').addEventListener('click',()=>tourShow(0));
+function stopPulse(){var b=document.getElementById('tourStart'); if(b)b.classList.remove('pulse');}
+document.getElementById('tourStart').addEventListener('click',()=>{stopPulse();tourShow(0);});
+// stop the pulse once they engage with the prototype (state nav, time control, or the phone itself)
+['.statenav','.phone'].forEach(function(sel){var el=document.querySelector(sel); if(el)el.addEventListener('pointerdown',stopPulse,{once:true});});
 document.getElementById('tourNext').onclick=()=>{ tourI===TOUR.length-1 ? tourEnd() : tourShow(tourI+1); };
 document.getElementById('tourPrev').onclick=()=>tourShow(tourI-1);
 document.getElementById('tourSkip').onclick=tourEnd;
