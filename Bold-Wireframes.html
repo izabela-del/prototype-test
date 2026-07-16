@@ -32,6 +32,12 @@
   .seg button:hover{color:var(--ink)}
   .seg button.on{background:var(--purple);color:#fff}
   .hint{color:var(--muted);font-size:12.5px}
+  .timec{display:inline-flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--line);border-radius:100px;padding:8px 16px}
+  .timec-lbl{font-size:12.5px;font-weight:700;color:var(--ink-2);white-space:nowrap}
+  .timec input[type=range]{width:180px;accent-color:var(--purple);cursor:pointer}
+  .clock{font-size:12.5px;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums;min-width:104px;text-align:right}
+  .tbtn{border:1px solid var(--line);background:#fff;border-radius:100px;padding:8px 14px;font-size:12.5px;font-weight:600;color:var(--ink-2);cursor:pointer;font-family:var(--sans)}
+  .tbtn:hover{border-color:var(--purple);color:var(--purple)}
   .stage{display:flex;gap:34px;align-items:flex-start;flex-wrap:wrap;justify-content:center}
 
   /* phone */
@@ -379,14 +385,13 @@
     <span class="hint">← The checklist changes across your 5 clinical states (only affects the Today tab)</span>
   </div>
   <div class="controls">
-    <div class="seg" id="timeSeg">
-      <button class="on" data-tk="auto">Auto</button>
-      <button data-tk="morning">Morning</button>
-      <button data-tk="afternoon">Afternoon</button>
-      <button data-tk="evening">Evening</button>
-      <button data-tk="night">Night</button>
+    <div class="timec">
+      <span class="timec-lbl">Time of day</span>
+      <input type="range" id="timeSlider" min="0" max="24" step="0.25">
+      <span class="clock" id="clockLbl"></span>
     </div>
-    <span class="hint">Time of day — Auto follows the real clock; switch to preview how Today reads at a given time</span>
+    <button class="tbtn" id="autoBtn">Use real time</button>
+    <span class="hint">Drag to preview how Today reads through the day. Auto follows the real clock.</span>
   </div>
 
   <div class="stage">
@@ -511,14 +516,9 @@ const SKY_KF=[[0,[110,110,175]],[5,[255,150,120]],[7.5,[255,214,90]],[12,[255,23
 function skyColor(h){for(var i=0;i<SKY_KF.length-1;i++){var a=SKY_KF[i],b=SKY_KF[i+1];if(h>=a[0]&&h<=b[0]){var t=(h-a[0])/(b[0]-a[0]),c=a[1],d=b[1];return 'rgb('+Math.round(c[0]+(d[0]-c[0])*t)+','+Math.round(c[1]+(d[1]-c[1])*t)+','+Math.round(c[2]+(d[2]-c[2])*t)+')';}}return 'rgb(255,214,90)';}
 function skyDaylight(h){if(h>=7&&h<=17)return 1;if(h>5&&h<7)return (h-5)/2;if(h>17&&h<19)return 1-(h-17)/2;return 0;}
 /* time of day — 'auto' follows the real clock; presets preview a time. Content personalizes with it. */
-let timeKey='auto';
-function curH(){
-  if(timeKey==='morning')return 9;
-  if(timeKey==='afternoon')return 14;
-  if(timeKey==='evening')return 19;
-  if(timeKey==='night')return 22;
-  var d=new Date();return d.getHours()+d.getMinutes()/60;
-}
+let timeH=null; // null = auto (real clock); a number = previewed hour
+function curH(){ if(timeH!=null) return timeH; var d=new Date(); return d.getHours()+d.getMinutes()/60; }
+function fmtClock(h){var hr=Math.floor(h)%24,m=Math.round((h-Math.floor(h))*60);if(m===60){m=0;hr=(hr+1)%24;}var ap=hr>=12?'PM':'AM',h12=hr%12||12;return h12+':'+String(m).padStart(2,'0')+' '+ap;}
 function greetWord(){var h=curH();return (h>=5&&h<12)?'Good morning':(h<17)?'Good afternoon':'Good evening';}
 function timeLabel(kind){
   var h=curH(),cp=(h>=5&&h<12)?'morning':(h>=12&&h<17)?'afternoon':(h>=17&&h<21)?'evening':'night';
@@ -991,13 +991,16 @@ function render(){
   }
   document.querySelectorAll('#tabbar .tab').forEach(b=>b.classList.toggle('on',b.dataset.t===tab));
   document.querySelectorAll('#variantSeg button').forEach(b=>b.classList.toggle('on',b.dataset.v===variant));
-  document.querySelectorAll('#timeSeg button').forEach(b=>b.classList.toggle('on',b.dataset.tk===timeKey));
+  var sl=document.getElementById('timeSlider'), cl=document.getElementById('clockLbl');
+  if(sl) sl.value=curH();
+  if(cl) cl.textContent=(timeH==null?'Auto · ':'')+fmtClock(curH());
 }
 function go(t){tab=t;render();}
 function setMsg(m){msgTab=m;render();}
 document.querySelectorAll('#tabbar .tab').forEach(b=>b.onclick=()=>go(b.dataset.t));
 document.querySelectorAll('#variantSeg button').forEach(b=>b.onclick=()=>{variant=b.dataset.v;tab='today';render();});
-document.querySelectorAll('#timeSeg button').forEach(b=>b.onclick=()=>{timeKey=b.dataset.tk;render();});
+document.getElementById('timeSlider').addEventListener('input',e=>{timeH=parseFloat(e.target.value);render();});
+document.getElementById('autoBtn').onclick=()=>{timeH=null;render();};
 
 render();
 </script>
