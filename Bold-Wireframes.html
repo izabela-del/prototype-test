@@ -43,6 +43,11 @@
   .clock{font-size:12.5px;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums;min-width:104px;text-align:right}
   .tbtn{border:1px solid var(--line);background:#fff;border-radius:100px;padding:8px 14px;font-size:12.5px;font-weight:600;color:var(--ink-2);cursor:pointer;font-family:var(--sans)}
   .tbtn:hover{border-color:var(--purple);color:var(--purple)}
+  .ctrl-row{display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start;margin:18px 0 26px}
+  .ctrl{display:flex;flex-direction:column;gap:9px}
+  .ctrl-lbl{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  .ctrl-hint{font-size:12px;color:var(--muted);line-height:1.5;max-width:360px}
+  .ctrl-inline{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
   .stage{display:flex;gap:34px;align-items:flex-start;flex-wrap:wrap;justify-content:center}
 
   /* phone */
@@ -386,24 +391,29 @@
     <p class="wip">A work in progress — some screens are still concept (flagged in-app), and copy is being finalized. Best viewed on a desktop browser.</p>
   </div>
 
-  <div class="controls">
-    <div class="seg" id="variantSeg">
-      <button class="on" data-v="s1">1 · Sign-up → Paperwork</button>
-      <button data-v="s2">2 · Paperwork → Visit</button>
-      <button data-v="s3">3 · Post-visit → Labs</button>
-      <button data-v="s4">4 · On medication</button>
-      <button data-v="s5">5 · Maintenance</button>
+  <div class="ctrl-row">
+    <div class="ctrl">
+      <div class="ctrl-lbl">Clinical state</div>
+      <div class="seg" id="variantSeg">
+        <button class="on" data-v="s1">1 · Sign-up → Paperwork</button>
+        <button data-v="s2">2 · Paperwork → Visit</button>
+        <button data-v="s3">3 · Post-visit → Labs</button>
+        <button data-v="s4">4 · On medication</button>
+        <button data-v="s5">5 · Maintenance</button>
+      </div>
+      <div class="ctrl-hint">Steps the Today checklist through the five stages of care. Affects the Today tab only.</div>
     </div>
-    <span class="hint">← The checklist changes across your 5 clinical states (only affects the Today tab)</span>
-  </div>
-  <div class="controls">
-    <div class="timec">
-      <span class="timec-lbl">Time of day</span>
-      <input type="range" id="timeSlider" min="0" max="24" step="0.25">
-      <span class="clock" id="clockLbl"></span>
+    <div class="ctrl">
+      <div class="ctrl-lbl">Time of day</div>
+      <div class="ctrl-inline">
+        <div class="timec">
+          <input type="range" id="timeSlider" min="0" max="24" step="0.25">
+          <span class="clock" id="clockLbl"></span>
+        </div>
+        <button class="tbtn" id="autoBtn">Use real time</button>
+      </div>
+      <div class="ctrl-hint">Preview how Today reads through the day. Auto follows the real clock. Affects the Today tab only.</div>
     </div>
-    <button class="tbtn" id="autoBtn">Use real time</button>
-    <span class="hint">Drag to preview how Today reads through the day. Auto follows the real clock.</span>
   </div>
 
   <div class="stage">
