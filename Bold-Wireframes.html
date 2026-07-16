@@ -25,7 +25,12 @@
   .page{max-width:1180px;margin:0 auto;padding:28px 20px 80px}
   .eyebrow{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--purple);margin-bottom:8px}
   .head h1{font-family:var(--serif);font-size:32px;letter-spacing:-.01em;margin:0 0 6px}
-  .head p{color:var(--ink-2);margin:0 0 18px;max-width:680px;font-size:15px}
+  .head p{color:var(--ink-2);margin:0 0 14px;max-width:680px;font-size:15px}
+  .head .howto{list-style:none;padding:0;margin:0 0 14px;max-width:680px;display:grid;gap:7px}
+  .head .howto li{font-size:14px;color:var(--ink-2);line-height:1.5;padding-left:20px;position:relative}
+  .head .howto li::before{content:"→";position:absolute;left:0;color:var(--purple);font-weight:700}
+  .head .howto b{color:var(--ink)}
+  .head .wip{font-size:13px;color:var(--muted);font-style:italic}
   .controls{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:16px 0 26px}
   .seg{display:inline-flex;background:#fff;border:1px solid var(--line);border-radius:100px;padding:4px;gap:2px}
   .seg button{border:0;background:transparent;font-family:var(--sans);font-size:13px;font-weight:600;color:var(--muted);padding:8px 15px;border-radius:100px;cursor:pointer;white-space:nowrap;transition:background .15s,color .15s}
@@ -360,8 +365,8 @@
   .note{max-width:300px;flex:0 0 300px;align-self:flex-start;background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:var(--shadow)}
   .note h3{font-family:var(--serif);font-size:17px;margin:0 0 8px}
   .note p{font-size:13px;color:var(--ink-2);margin:0 0 10px}
-  .note .k{display:flex;gap:8px;font-size:12.5px;color:var(--ink-2);margin-bottom:7px;align-items:flex-start}
-  .note .k b{color:var(--ink)}
+  .note .k{font-size:12.5px;color:var(--ink-2);margin-bottom:8px;line-height:1.55}
+  .note .k b{color:var(--ink);margin-right:4px}
   .note .note-model{font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:10px;margin-top:2px}
   @media(max-width:560px){.phone{transform:scale(.95);transform-origin:top center}}
 </style>
@@ -371,7 +376,14 @@
   <div class="head">
     <div class="eyebrow">Bold · Member app</div>
     <h1>Member app wireframes</h1>
-    <p>Low-fidelity and clickable. Switch tabs at the bottom of the phone, and use the state switcher to step through the five clinical states — the Today checklist changes with each. Tap the greeting or any “Ask Bold” chip to open the assistant.</p>
+    <p>An interactive, low-fidelity wireframe of the older-adult GLP-1 experience. It’s clickable, so feel free to poke around.</p>
+    <ul class="howto">
+      <li><b>Step through the journey</b> — use the state switcher below to move through the five stages of care. The Today checklist changes with each.</li>
+      <li><b>Try different times of day</b> — drag the time-of-day slider, or leave it on Auto. The greeting and daily nudges adapt through the day.</li>
+      <li><b>Move between tabs</b> — Today, Care, My Health, and Messages sit at the bottom of the phone.</li>
+      <li><b>Talk to the assistant</b> — tap the greeting or any “Ask Bold” pill to see how it answers and hands off to a real person.</li>
+    </ul>
+    <p class="wip">A work in progress — some screens are still concept (flagged in-app), and copy is being finalized. Best viewed on a desktop browser.</p>
   </div>
 
   <div class="controls">
