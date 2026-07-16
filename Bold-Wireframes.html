@@ -31,6 +31,22 @@
   .head .howto li::before{content:"→";position:absolute;left:0;color:var(--purple);font-weight:700}
   .head .howto b{color:var(--ink)}
   .head .wip{font-size:13px;color:var(--muted);font-style:italic}
+  .tourbtn{display:inline-flex;align-items:center;gap:8px;border:1.5px solid var(--purple);background:var(--purple-soft);color:var(--purple);border-radius:100px;padding:9px 17px;font-size:13.5px;font-weight:700;cursor:pointer;font-family:var(--sans);margin:2px 0 16px}
+  .tourbtn:hover{background:#EBE1FF}
+  .tourbtn .pl{font-size:10px}
+  /* guided tour */
+  .tour{position:fixed;inset:0;z-index:200;display:none;pointer-events:none}
+  .tour.on{display:block}
+  .tour-ring{position:fixed;border-radius:14px;box-shadow:0 0 0 9999px rgba(17,17,43,.5);z-index:201;pointer-events:none;transition:top .25s ease,left .25s ease,width .25s ease,height .25s ease}
+  .tour-tip{position:fixed;z-index:202;background:#fff;border-radius:16px;box-shadow:0 16px 44px rgba(20,20,50,.3);padding:16px 18px 14px;width:300px;max-width:calc(100vw - 24px);pointer-events:auto}
+  .tour-step{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--purple);margin-bottom:6px}
+  .tour-title{font-family:var(--serif);font-size:18px;font-weight:700;margin-bottom:5px}
+  .tour-body{font-size:13.5px;color:var(--ink-2);line-height:1.5;margin-bottom:14px}
+  .tour-nav{display:flex;align-items:center;gap:8px}
+  .tour-count{font-size:12px;color:var(--muted);margin-right:auto}
+  .tour-nav button{border:1.5px solid var(--line);background:#fff;border-radius:20px;padding:7px 13px;font-size:12.5px;font-weight:700;color:var(--ink-2);cursor:pointer;font-family:var(--sans)}
+  .tour-nav button.primary{background:var(--purple);color:#fff;border-color:var(--purple)}
+  .tour-nav button:hover{border-color:var(--purple)}
   .controls{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:16px 0 26px}
   .seg{display:inline-flex;background:#fff;border:1px solid var(--line);border-radius:100px;padding:4px;gap:2px}
   .seg button{border:0;background:transparent;font-family:var(--sans);font-size:13px;font-weight:600;color:var(--muted);padding:8px 15px;border-radius:100px;cursor:pointer;white-space:nowrap;transition:background .15s,color .15s}
@@ -410,12 +426,7 @@
     <div class="eyebrow">Bold · Member app</div>
     <h1>Member app wireframes</h1>
     <p>An interactive, low-fidelity wireframe of the older-adult GLP-1 experience. It’s clickable, so feel free to poke around.</p>
-    <ul class="howto">
-      <li><b>Step through the journey</b> — use the state switcher below to move through the five stages of care. The Today checklist changes with each.</li>
-      <li><b>Try different times of day</b> — drag the time-of-day slider, or leave it on Auto. The greeting and daily nudges adapt through the day.</li>
-      <li><b>Move between tabs</b> — Today, Care, My Health, and Messages sit at the bottom of the phone.</li>
-      <li><b>Talk to the assistant</b> — tap the greeting or any “Ask Bold” pill to see how it answers and hands off to a real person.</li>
-    </ul>
+    <button class="tourbtn" id="tourStart"><span class="pl">▶</span> Take a quick tour</button>
     <p class="wip">A work in progress — some screens are still concept (flagged in-app), and copy is being finalized. Best viewed on a desktop browser.</p>
   </div>
 
@@ -449,6 +460,21 @@
     </div>
 
     <div class="note" id="note"></div>
+  </div>
+</div>
+
+<div class="tour" id="tour">
+  <div class="tour-ring" id="tourRing"></div>
+  <div class="tour-tip" id="tourTip">
+    <div class="tour-step" id="tourStepLbl">Quick tour</div>
+    <div class="tour-title" id="tourTitle"></div>
+    <div class="tour-body" id="tourBody"></div>
+    <div class="tour-nav">
+      <span class="tour-count" id="tourCount"></span>
+      <button id="tourSkip">Skip</button>
+      <button id="tourPrev">Back</button>
+      <button id="tourNext" class="primary">Next</button>
+    </div>
   </div>
 </div>
 
@@ -1029,6 +1055,48 @@ document.getElementById('timeSlider').addEventListener('input',e=>{timeH=parseFl
 document.getElementById('autoBtn').onclick=()=>{timeH=null;render();};
 
 render();
+
+/* ---------- guided tour ---------- */
+const TOUR=[
+  {sel:'#variantSeg',t:'Step through the journey',b:'Move through the five stages of care. The Today checklist changes with each. (Affects the Today tab only.)'},
+  {sel:'.statenav-time',t:'Try different times of day',b:'Drag the slider, or leave it on Auto. The greeting and daily nudges adapt through the day.'},
+  {sel:'#tabbar',t:'Move between tabs',b:'Today, Care, My Health, and Messages sit at the bottom of the phone.'},
+  {sel:'.hero2',t:'Talk to the assistant',b:'Tap the greeting or any “Ask Bold” pill. It answers, and hands off to a real person when needed.'}
+];
+let tourI=0;
+const tourEl=document.getElementById('tour');
+function tourOn(){return tourEl.classList.contains('on');}
+function positionTour(el){
+  var r=el.getBoundingClientRect(), pad=8, ring=document.getElementById('tourRing'), tip=document.getElementById('tourTip');
+  ring.style.top=(r.top-pad)+'px'; ring.style.left=(r.left-pad)+'px'; ring.style.width=(r.width+pad*2)+'px'; ring.style.height=(r.height+pad*2)+'px';
+  var th=tip.offsetHeight, tw=tip.offsetWidth, vw=window.innerWidth, vh=window.innerHeight;
+  var top=r.bottom+14; if(top+th>vh-12) top=Math.max(12, r.top-th-14);
+  var left=r.left; if(left+tw>vw-12) left=vw-tw-12; if(left<12) left=12;
+  tip.style.top=top+'px'; tip.style.left=left+'px';
+}
+function tourShow(i){
+  tourI=Math.max(0,Math.min(TOUR.length-1,i));
+  var s=TOUR[tourI], el=document.querySelector(s.sel);
+  tourEl.classList.add('on');
+  document.getElementById('tourStepLbl').textContent='Quick tour';
+  document.getElementById('tourTitle').textContent=s.t;
+  document.getElementById('tourBody').textContent=s.b;
+  document.getElementById('tourCount').textContent=(tourI+1)+' of '+TOUR.length;
+  document.getElementById('tourPrev').style.visibility=tourI===0?'hidden':'visible';
+  document.getElementById('tourNext').textContent=tourI===TOUR.length-1?'Done':'Next';
+  if(!el){tourEnd();return;}
+  el.scrollIntoView({behavior:'smooth',block:'center'});
+  setTimeout(()=>positionTour(el),320);
+}
+function tourEnd(){tourEl.classList.remove('on');}
+document.getElementById('tourStart').addEventListener('click',()=>tourShow(0));
+document.getElementById('tourNext').onclick=()=>{ tourI===TOUR.length-1 ? tourEnd() : tourShow(tourI+1); };
+document.getElementById('tourPrev').onclick=()=>tourShow(tourI-1);
+document.getElementById('tourSkip').onclick=tourEnd;
+function tourReposition(){ if(tourOn()){var el=document.querySelector(TOUR[tourI].sel); if(el)positionTour(el);} }
+window.addEventListener('resize',tourReposition);
+window.addEventListener('scroll',tourReposition,true);
+try{ if(!localStorage.getItem('boldTourSeen')){ localStorage.setItem('boldTourSeen','1'); setTimeout(()=>tourShow(0),650); } }catch(e){}
 </script>
 </body>
 </html>
